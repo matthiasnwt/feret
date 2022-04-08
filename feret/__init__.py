@@ -1,7 +1,8 @@
-from feret.FeretDiameter import FeretDiameter
+from feret.main import Parameters, Calculater
 
-def calculate(img, **kwargs):
+def calc(img, **kwargs):
 
-    feret = FeretDiameter(img, **kwargs)
+    maxferet, minferet = Calculater(img, **kwargs)()
+    results = Parameters(maxferet, minferet)
     # feret.plot()
-    return feret()
+    return feretS
