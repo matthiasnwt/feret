@@ -43,6 +43,13 @@ class FeretDiameter():
 
 
     def calculate_maxferet(self):
+        """
+        The maxferet is defined as the maximum euclidean
+        distance between two points. pdist calculates
+        all the distances between the points and than
+        the maximum is taken from all those.
+
+        """
 
         self.maxferet = max(pdist(self.points.T, "euclidean"))
     
