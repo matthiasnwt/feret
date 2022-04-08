@@ -33,18 +33,14 @@ class Calculater():
 
         self.degs = np.deg2rad(np.arange(0, 180+self.precesion, self.precesion))
         self.ferets = np.zeros(len(self.degs))
-        self.ms = np.zeros(len(self.degs))
-        self.t_maxs = np.zeros(len(self.degs))
-        self.t_mins = np.zeros(len(self.degs))
-        self.p_maxs = np.zeros((len(self.degs), 2))
-        self.p_mins = np.zeros((len(self.degs), 2))
 
-        # start = time.perf_counter()
         self.find_points()
-        # print('points', time.perf_counter() - start)
-        self.calculate_center()
-        # self.calculate_ferets()
-        self.calculate_distance_matrix()
+
+        (self.y0, self.x0) = ndimage.center_of_mass(self.contour)
+
+
+        self.calculate_ferets()
+
 
         self.minimize_feret()
 
@@ -96,7 +92,8 @@ class Calculater():
         Method caluclates the center of the binary image.
 
         """
-        (self.y0, self.x0) = ndimage.center_of_mass(self.contour)
+        
+
 
 
     def calculate_distances(self, angle):
@@ -114,25 +111,7 @@ class Calculater():
 
         feret = np.abs(t_max - t_min) / np.sqrt(1+m**2)
 
-        return feret, m, t_max, t_min, self.points.T[max_i], self.points.T[min_i]
-
-
-    def calculate_distances_func(self, angle, sign):
-        """ 
-        Method calculates the distance of two points at a givin angle.
-
-        """
-        m = np.tan(angle)
-        ds = np.cos(angle)*(self.y0-self.points[0])-np.sin(angle)*(self.x0-self.points[1])
-        max_i = np.argmax(ds)
-        min_i = np.argmin(ds)
-
-        t_max = self.points.T[max_i][0] - m * self.points.T[max_i][1]
-        t_min = self.points.T[min_i][0] - m * self.points.T[min_i][1]
-
-        feret = np.abs(t_max - t_min) / np.sqrt(1+m**2)
-
-        return sign * feret
+        return feret
 
 
     def minimize_feret(self):
@@ -142,9 +121,8 @@ class Calculater():
         """
 
         res_minferet = scipy.optimize.minimize(
-            self.calculate_distances_func, 
-            x0=self.minferet_angle, 
-            args=(1, ), 
+            self.calculate_distances, 
+            x0=self.minferet_angle,  
             bounds=((0., np.pi),))
 
         self.minferet = res_minferet.fun
@@ -158,14 +136,10 @@ class Calculater():
 
         
         for i, angle in enumerate(self.degs):
-            feret, m, t_max, t_min, p_max, p_min = self.calculate_distances(angle)
+            feret = self.calculate_distances(angle)
 
             self.ferets[i] = feret
-            self.ms[i] = m
-            self.t_maxs[i] = t_max
-            self.t_mins[i] = t_min
-            self.p_maxs[i] = p_max
-            self.p_mins[i] = p_min
+
 
 
         self.maxferet_initial = np.max(self.ferets)
@@ -179,39 +153,6 @@ class Calculater():
 
         
 
-
-    def calculate_distance_matrix(self):
-
-        degs = np.deg2rad(np.arange(0, 180, self.precesion))
-        ms = np.tan(degs)
-
-
-        coss = np.cos(degs).reshape(1, -1)
-        sins = np.sin(degs).reshape(1, -1)
-
-        ps0 = (self.y0-self.points[0]).reshape(-1, 1)
-        ps1 = (self.x0-self.points[1]).reshape(-1, 1)
-
-        ds = np.multiply(coss, ps0) - np.multiply(sins, ps1)
-
-        max_is = np.argmax(ds, axis=0)
-        min_is = np.argmin(ds, axis=0)
-       
-        t_maxs = self.points[0][max_is] - ms * self.points[1][max_is]
-        t_mins = self.points[0][min_is] - ms * self.points[1][min_is]
-
-        ferets = np.abs(t_maxs - t_mins) / np.sqrt(1+ms**2)
-
-        self.ferets = ferets
-
-        self.maxferet_initial = np.max(self.ferets)
-        self.minferet_initial = np.min(self.ferets)
-
-        self.minferet_index = np.where(self.ferets == self.minferet_initial)
-        self.maxferet_index = np.where(self.ferets == self.maxferet_initial)
-
-        self.minferet_angle = self.degs[self.minferet_index]
-        self.maxferet_angle = self.degs[self.maxferet_index]
 
 
 
