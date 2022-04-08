@@ -43,6 +43,10 @@ class FeretDiameter():
         # self.calculate_distance_matrix()
 
         self.minimize_feret()
+       
+    
+    def maxferet(self):
+        pass
     
     
 
