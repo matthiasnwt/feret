@@ -46,7 +46,6 @@ class FeretDiameter():
 
         self.maxferet = max(pdist(self.points.T, "euclidean"))
     
-        #0.025656400000000135 
 
     def find_points(self):
         """
