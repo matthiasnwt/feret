@@ -136,7 +136,10 @@ class Calculater():
 
 
     def minimize_feret(self):
+        """
 
+
+        """
 
         res_minferet = scipy.optimize.minimize(
             self.calculate_distances_func, 
@@ -145,18 +148,13 @@ class Calculater():
             bounds=((0., np.pi),))
 
         self.minferet = res_minferet.fun
-
-
-        # plt.scatter(self.degs, self.ferets)
-        # plt.axvline(self.minferet_angle, color='black')
-        # plt.axvline(res.x, color='red')
-        # plt.axhline(self.minferet, color='black')
-        # plt.axhline(res.fun, color='red')
-
-        # plt.show()
        
 
     def calculate_ferets(self):
+        """
+
+
+        """
 
         
         for i, angle in enumerate(self.degs):
