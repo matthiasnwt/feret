@@ -46,7 +46,7 @@ class FeretDiameter():
        
     
     def maxferet(self):
-        print("work in progress")
+        self.maxf = -1
         pass
     
     
