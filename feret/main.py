@@ -16,35 +16,20 @@ class Parameters():
 
 class Calculater():
 
-    def __init__(self, img, **kwargs):
+    def __init__(self, img, edge=False):
 
         self.img = img
+        self.edge = edge
 
-        if 'precision' in kwargs:
-            self.precesion = kwargs['precision']
-        else:
-            self.precesion = 1
-
-        if 'edge' in kwargs:
-            self.edge = kwargs['edge']
-        else:
-            self.edge = False
-
-
-        self.degs = np.deg2rad(np.arange(0, 180+self.precesion, self.precesion))
-        self.ferets = np.zeros(len(self.degs))
 
         self.find_points()
-
-        (self.y0, self.x0) = ndimage.center_of_mass(self.contour)
-
-
-        self.calculate_ferets()
+        self.y0, self.x0 = ndimage.center_of_mass(self.contour)
 
 
-        self.minimize_feret()
+        
 
         self.calculate_maxferet()
+        self.calculate_minferet()
 
 
     def calculate_maxferet(self):
@@ -57,6 +42,18 @@ class Calculater():
         """
 
         self.maxferet = max(pdist(self.points.T, "euclidean"))
+
+
+    def calculate_maxferet(self):
+        """
+        To calcualte the minferet, first the distances for all
+        the angles from 0-180° are calculted and the minimum
+        ist used as an initial guess for a function minimization.
+
+        """
+
+        self.calculate_ferets()
+        self.minimize_feret()
     
 
     def find_points(self):
@@ -86,14 +83,7 @@ class Calculater():
             self.points = np.array(np.nonzero(self.contour))
 
 
-
-    def calculate_center(self):
-        """
-        Method caluclates the center of the binary image.
-
-        """
-        
-
+     
 
 
     def calculate_distances(self, angle):
@@ -133,28 +123,16 @@ class Calculater():
 
 
         """
-
+        degs = np.deg2rad(np.arange(0, 180.1, 0.1))
+        distances = np.empty((len(degs)))
         
-        for i, angle in enumerate(self.degs):
-            feret = self.calculate_distances(angle)
-
-            self.ferets[i] = feret
+        for i, angle in enumerate(degs):
+            distances[i] = self.calculate_distances(angle)
 
 
-
-        self.maxferet_initial = np.max(self.ferets)
-        self.minferet_initial = np.min(self.ferets)
-
-        self.minferet_index = np.where(self.ferets == self.minferet_initial)
-        self.maxferet_index = np.where(self.ferets == self.maxferet_initial)
-
-        self.minferet_angle = self.degs[self.minferet_index]
-        self.maxferet_angle = self.degs[self.maxferet_index]
-
-        
-
-
-
+        self.minferet_initial = np.min(distances)
+        self.minferet_index = np.where(distances == self.minferet_initial)
+        self.minferet_angle = degs[self.minferet_index]
 
 
     def __call__(self):
