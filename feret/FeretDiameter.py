@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy import ndimage
 import time, scipy.optimize
-
+from scipy.spatial.distance import pdist
 
 
 class FeretDiameter():
@@ -38,8 +38,15 @@ class FeretDiameter():
         # self.calculate_distance_matrix()
 
         self.minimize_feret()
+
+        self.calculate_maxferet()
+
+
+    def calculate_maxferet(self):
+
+        self.maxferet = max(pdist(self.points.T, "euclidean"))
     
-    
+        #0.025656400000000135 
 
     def find_points(self):
         """
@@ -58,12 +65,12 @@ class FeretDiameter():
             self.contour = np.zeros((self.img.shape[0] * 2, self.img.shape[1] * 2))
             self.contour[tuple(new_points)] = 1
 
-            edm = ndimage.morphology.distance_transform_edt(self.contour)
+            edm = ndimage.distance_transform_edt(self.contour)
             self.contour[edm > 1] = 0
             self.points = np.array(np.nonzero(self.contour))
         else:
             self.contour = np.copy(self.img)
-            edm = ndimage.morphology.distance_transform_edt(self.contour)
+            edm = ndimage.distance_transform_edt(self.contour)
             self.contour[edm > 1] = 0
             self.points = np.array(np.nonzero(self.contour))
 
@@ -74,7 +81,7 @@ class FeretDiameter():
         Method caluclates the center of the binary image.
 
         """
-        (self.y0, self.x0) = ndimage.measurements.center_of_mass(self.contour)
+        (self.y0, self.x0) = ndimage.center_of_mass(self.contour)
 
 
     def calculate_distances(self, angle):
@@ -122,13 +129,6 @@ class FeretDiameter():
             args=(1, ), 
             bounds=((0., np.pi),))
 
-        res_maxferet = scipy.optimize.minimize(
-            self.calculate_distances_func,
-            x0=self.maxferet_angle, 
-            args=(-1, ), 
-            bounds=((0., np.pi),))
-
-        self.maxferet = -res_maxferet.fun
         self.minferet = res_minferet.fun
 
 
@@ -210,18 +210,16 @@ class FeretDiameter():
             return self.maxferet, self.minferet
 
 
-    def plot(self, distance=False):
-        plt.imshow(self.contour)
-        xs = np.linspace(0, self.contour.shape[1])
-        for m, t_max, t_min, p_max, p_min in zip(self.ms, self.t_maxs, self.t_mins, self.p_maxs, self.p_mins):
-            ys = xs * m + t_max
-            plt.plot(xs, ys, color='gray')
 
-            ys = xs * m + t_min
-            plt.plot(xs, ys)
+if __name__ == '__main__':
+    import tifffile as tif
+    import time
 
-            # plt.plot((p_max[1], p_min[1]), (p_max[0], p_min[0]))
+    t0 = time.perf_counter()
+    img = tif.imread('24_binary.tif')
+    feret = FeretDiameter(img)
+    t1 = time.perf_counter()
 
-        plt.scatter(self.x0, self.y0)
-        plt.ylim(0, self.contour.shape[0])
-        plt.show()
+    print(t1 - t0, 'sekunden')
+    print(feret())
+
