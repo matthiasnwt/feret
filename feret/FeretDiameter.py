@@ -34,8 +34,8 @@ class FeretDiameter():
         self.find_points()
         # print('points', time.perf_counter() - start)
         self.calculate_center()
-        self.calculate_ferets()
-        # self.calculate_distance_matrix()
+        # self.calculate_ferets()
+        self.calculate_distance_matrix()
 
         self.minimize_feret()
 
