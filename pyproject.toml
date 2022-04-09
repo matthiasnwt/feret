@@ -12,7 +12,7 @@ homepage = "https://github.com/matthiasnwt/feret"
 keywords = ["feret", "maxferet", "diameter", "maximum"]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.5"
 numpy = "^1.22.3"
 scipy = "^1.8.0"
 matplotlib = "^3.5.1"

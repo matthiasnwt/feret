@@ -4,19 +4,12 @@ from scipy import ndimage
 import time, scipy.optimize
 from scipy.spatial.distance import pdist
 
-class Parameters():
-    def __init__(
-        self,
-        maxferet,
-        minferet):
 
-        self.maxferet = maxferet
-        self.minferet = minferet
 
 
 class Calculater():
 
-    def __init__(self, img, edge=False):
+    def __init__(self, img, edge):
 
         self.img = img
         self.edge = edge
@@ -25,11 +18,6 @@ class Calculater():
         self.find_points()
         self.y0, self.x0 = ndimage.center_of_mass(self.contour)
 
-
-        
-
-        self.calculate_maxferet()
-        self.calculate_minferet()
 
 
     def calculate_maxferet(self):
@@ -43,8 +31,11 @@ class Calculater():
 
         self.maxferet = max(pdist(self.points.T, "euclidean"))
 
+        if self.edge:
+            self.maxferet /= 2
 
-    def calculate_maxferet(self):
+
+    def calculate_minferet(self):
         """
         To calcualte the minferet, first the distances for all
         the angles from 0-180° are calculted and the minimum
@@ -54,6 +45,9 @@ class Calculater():
 
         self.calculate_ferets()
         self.minimize_feret()
+
+        if self.edge:
+            self.minferet /= 2
     
 
     def find_points(self):
@@ -136,25 +130,10 @@ class Calculater():
 
 
     def __call__(self):
-        if self.edge:
-            return self.maxferet / 2, self.minferet / 2
-        else:
-            return self.maxferet, self.minferet
+        return self.maxferet, self.minferet
 
 
 
 if __name__ == '__main__':
-    import tifffile as tif
-    import time
-
-    img = tif.imread('24_binary.tif')
-
-    t0 = time.perf_counter()
-    maxferet, minferet = Calculater(img)()
-    results = Parameters(maxferet, minferet)
-
-    t1 = time.perf_counter()
-
-    print(t1 - t0, 'sekunden')
-    print(results.maxferet, results.minferet)
+    pass
 
