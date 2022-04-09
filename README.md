@@ -2,6 +2,13 @@
 
 This python module can calculate the maximum Feret diameter (maxferet) and minimum Feret diameter (minferet) of a binary image. For a detailed explanation see this [wikipedia page](https://en.wikipedia.org/wiki/Feret_diameter).
 
+## Installation
+This project is available with pip
+
+`pip install feret`
+
+## Informations
+
 ### Maxferet
 The maxferet is calculated as the maximum euclidean distance of all pixels.
 
@@ -11,6 +18,7 @@ The minferet is only approximated in two steps at the moment. First , the distan
 
 At this early development stage, it can only calculate the maximum and minimum Feret Diameter but feature releases will offer the Feret diameter 90° to maximum and minimum. The module will also not return the angle of the diameters. Many things will come in the future.
 
+## Use
 The module can be used as followed:
 
 ```python
