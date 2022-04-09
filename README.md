@@ -1,4 +1,4 @@
-# Feret
+# Python Module to calculate the Feret Diameter of Binary Images
 
 This python module can calculate the maximum Feret diameter (maxferet) and minimum Feret diameter (minferet) of a binary image. For a detailed explanation see this [wikipedia page](https://en.wikipedia.org/wiki/Feret_diameter).
 
