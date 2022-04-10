@@ -1,6 +1,6 @@
 # *Feret*: A Python Module to calculate the Feret Diameter of Binary Images
 
-This python module can calculate the maximum Feret diameter (maxferet) and minimum Feret diameter (minferet) of a binary image. For a detailed explanation see this [wikipedia page](https://en.wikipedia.org/wiki/Feret_diameter).
+This python module can calculate the maximum Feret diameter (maxferet, maxf), the minimum Feret diameter (minferet, minf), and the Feret diameter 90 ° to the minimum Feret diameter (minferet90, minf90) of a binary image. For a detailed explanation see this [Wikipedia page](https://en.wikipedia.org/wiki/Feret_diameter).
 
 ## Installation
 This project is available via pip
@@ -13,7 +13,7 @@ This project is available via pip
 The maxferet is calculated as the maximum Euclidean distance of all pixels.
 
 #### Minferet
-The minferet is only approximated in two steps at the moment. First, the distance of to parallel lines, which surround the object, are calculated for all angles from 0° to 180°. The minimum of this first calculation is used as the initial guess for a minimization algorithm, which is the second part of the approximation. Even if this method is not perfect, the difference to the true minferet can be neglected for most cases.
+The minferet is only approximated in two steps at the moment. First, the distance of to parallel lines, which surround the object, is calculated for all angles from 0° to 180°. The minimum of this first calculation is used as the initial guess for a minimization algorithm, which is the second part of the approximation. Even if this method is not perfect, the difference to the true minferet can be neglected in most cases.
 
 
 At this early development stage, it can only calculate the maximum and minimum Feret Diameter but feature releases will offer the Feret diameter 90° to maximum and minimum. The module will also not return the angle of the diameters. Many things will come in the future.
@@ -28,21 +28,29 @@ import feret
 import tifffile as tif
 img = tif.imread('example.tif') # Image has to be a numpy 2d-array.
 
-# get the class
-res = feret.calc(img)
-maxf, minf = res.maxferet, res.minferet
 
 # get the values
-maxf, minf = feret.all(img)
+maxf, minf, minf90 = feret.all(img)
 
 # get only maxferet
 maxf = feret.max(img)
 
 # get only minferet
 minf = feret.min(img)
+
+# get only minferet
+minf90 = feret.min90(img)
+
+# get all the informations
+res = feret.calc(img)
+maxf = res.maxf
+minf =  res.minf
+minf90 = res.minf90
+minf_angle = res.minf_angle
+minf90_angle = res.minf90_angle
 ```
 
-At the moment there is only one option. It is possible to use the pixel corners instead of the pixel centers. ImageJ uses pixel corners. Here the keyword `edge` is used. See the following code to get maxferet and minferet for the edges.
+There is an option to calculate the Feret diameters for the pixel edges instead of the centers. Just add an `edge=True` in the call as shown below. This works for all calls analogous.
 
 ```python
 import feret
@@ -51,17 +59,7 @@ import feret
 import tifffile as tif
 img = tif.imread('example.tif') # Image has to be a numpy 2d-array.
 
-# get the class
-res = feret.calc(img, edge=True)
-maxf, minf = res.maxferet, res.minferet
-
-# get the values
-maxf, minf = feret.all(img, edge=True)
-
 # get only maxferet
 maxf = feret.max(img, edge=True)
-
-# get only minferet
-minf = feret.min(img, edge=True)
 ```
 
