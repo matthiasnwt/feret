@@ -1,18 +1,33 @@
 [tool.poetry]
 name = "feret"
-version = "0.2"
+version = "0.3.4"
 description = "Calculate Feret diameter."
 authors = ["matthiasnwt <62239991+matthiasnwt@users.noreply.github.com>"]
 license = "MIT"
 readme = "README.md"
 
+
 repository = "https://github.com/matthiasnwt/feret"
 homepage = "https://github.com/matthiasnwt/feret"
 
-keywords = ["feret", "maxferet", "diameter", "maximum"]
+keywords = ["feret", "maxferet", "diameter", "maximum", "caliper"]
+
+classifiers = [
+	"Development Status :: 4 - Beta",
+	"Operating System :: Microsoft :: Windows",
+	"Operating System :: Unix",
+	"Operating System :: MacOS",
+	"Programming Language :: Python",
+	"Topic :: Scientific/Engineering",
+	"Topic :: Scientific/Engineering :: Physics",
+	"Topic :: Scientific/Engineering :: Image Processing",
+	"Topic :: Scientific/Engineering :: Information Analysis",
+	"Topic :: Scientific/Engineering :: Visualization",
+	"Topic :: Utilities"
+]
 
 [tool.poetry.dependencies]
-python = "^3.5"
+python = "^3"
 numpy = "^1.22.3"
 scipy = "^1.8.0"
 matplotlib = "^3.5.1"
