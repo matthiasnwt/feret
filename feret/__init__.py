@@ -1,4 +1,5 @@
-from feret.main import Calculater
+from main import Calculater
+import numpy as np
 
 def calc(img, edge=False):
     """
@@ -71,3 +72,9 @@ def min(img, edge=False):
     feret_calc = Calculater(img, edge)
     feret_calc.calculate_minferet()
     return feret_calc.minferet
+
+
+if __name__ == '__main__':
+    img = np.load('img.npy')
+    maxf = max(img)
+    print(maxf)
