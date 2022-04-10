@@ -90,6 +90,7 @@ class Calculater():
             bounds=((0., np.pi),))
 
         self.minf = res_minferet.fun
+        self.minf_angle = res_minferet.x
        
 
     def get_initial_minf_estimation(self):
