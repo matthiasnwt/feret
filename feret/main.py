@@ -55,11 +55,36 @@ class Calculater():
 
         self.maxf = np.max(pdists)
 
+
+
         maxf_coords_index = np.where(squareform(pdists) == self.maxf)[0]
         self.maxf_coords = self.points.T[maxf_coords_index]
 
+        ((y0, x0), (y1, x1)) = self.maxf_coords
+
+        m = (y0 - y1) / (x0 - x1)
+        t = y0 - m * x0
+
+        self.maxf_angle = np.arctan(m) + np.pi/2
+
         if self.edge:
             self.maxf /= 2
+
+
+    def calculate_maxferet90(self):
+        """
+        Method calculates the feret diameter which
+        is 90 degree to the maximum feret diameter.
+        It first checks if the angle of the maximum
+        feret diameter is already calculatet. If not
+        it calls the maxferet function.
+
+        """
+        self.maxf90_angle =self.maxf_angle + np.pi/2
+        self.maxf90 = self.calculate_distances(self.maxf90_angle)
+        
+        if self.edge:
+            self.maxf90 /= 2
 
 
     def calculate_minferet(self):
@@ -85,13 +110,12 @@ class Calculater():
         feret diameter is already calculatet. If not
         it calls the minferet function.
 
-        """
-
-        if not self.minf_angle in locals():
-            self.calculate_minferet()
-            
+        """        
         self.minf90_angle =self.minf_angle + np.pi/2
         self.minf90 = self.calculate_distances(self.minf90_angle)
+
+        if self.edge:
+            self.minf90 /= 2
         
 
     def minimize_feret(self):
