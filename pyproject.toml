@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "feret"
-version = "0.3.4"
+version = "0.4.0"
 description = "Calculate Feret diameter."
 authors = ["matthiasnwt <62239991+matthiasnwt@users.noreply.github.com>"]
 license = "MIT"
