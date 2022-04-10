@@ -5,11 +5,8 @@ import time, scipy.optimize
 from scipy.spatial.distance import pdist, squareform
 
 
-
 class Calculater():
-
     def __init__(self, img, edge):
-
         self.img = img
         self.edge = edge
 
@@ -39,6 +36,7 @@ class Calculater():
         else:
             self.contour = np.copy(self.img)
 
+        # Find contour of img.
         edm = ndimage.distance_transform_edt(self.contour)
         self.contour[edm > 1] = 0
         self.points = np.array(np.nonzero(self.contour))
@@ -88,7 +86,7 @@ class Calculater():
 
         res_minferet = scipy.optimize.minimize(
             self.calculate_distances, 
-            x0=self.minferet_angle,  
+            x0=self.minf_angle,  
             bounds=((0., np.pi),))
 
         self.minf = res_minferet.fun
