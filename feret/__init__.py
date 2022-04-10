@@ -117,9 +117,25 @@ def max90(img, edge=False):
     return feret_calc.maxf90
 
 
+def min_analytical(img, edge=False):
+    """
+    Calculate the anayltical minimum feret diameter (minf).
+
+    Args:
+        img (numpy.ndarray): binary-image
+        edge (boolean): use edges (vertices) or centers
+
+    Returns:
+        minf (float): minimum feret diameter
+    """
+
+    feret_calc = Calculater(img, edge)
+    feret_calc.calculate_minferet_analytical()
+    return feret_calc.minf
+
+
 if __name__ == '__main__':
     img = np.load('img.npy')
-    maxf, minf, minf90, maxf90 = all(img)
-    print(maxf, minf, minf90, maxf90)
-    maxf90 = max90(img)
-    print(maxf90)
+
+    minf = min_analytical(img)
+    print(minf)

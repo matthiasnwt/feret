@@ -14,6 +14,10 @@ class Calculater():
         self.y0, self.x0 = ndimage.center_of_mass(self.contour)
 
 
+    def calculate_minferet_analytical(self):
+        self.minf = -1
+
+
     def find_points(self):
         """
         Method find the points which are used to calcualte feret diameter
