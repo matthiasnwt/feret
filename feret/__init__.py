@@ -1,4 +1,7 @@
-from feret.main import Calculater
+
+from main import Calculater
+
+# from feret.main import Calculater
 import numpy as np
 
 def calc(img, edge=False):
@@ -96,6 +99,5 @@ def min90(img, edge=False):
 
 if __name__ == '__main__':
     img = np.load('img.npy')
-    maxf, minf = all(img, edge=True)
-    minf90 = min90(img)
+    maxf, minf, minf90 = all(img, edge=True)
     print(maxf, minf, minf90)
