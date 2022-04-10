@@ -38,7 +38,7 @@ maxf = feret.max(img)
 # get only minferet
 minf = feret.min(img)
 
-# get only minferet
+# get only minferet90
 minf90 = feret.min90(img)
 
 # get all the informations

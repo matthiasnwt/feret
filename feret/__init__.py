@@ -1,4 +1,4 @@
-from main import Calculater
+from feret.main import Calculater
 import numpy as np
 
 def calc(img, edge=False):
