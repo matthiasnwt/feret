@@ -108,9 +108,9 @@ class Calculater():
             distances[i] = self.calculate_distances(angle)
 
 
-        self.minferet_initial = np.min(distances)
-        self.minferet_index = np.where(distances == self.minferet_initial)
-        self.minferet_angle = degs[self.minferet_index]
+        self.minf_initial = np.min(distances)
+        self.minf_initial_index = np.where(distances == self.minf_initial)
+        self.minf_angle = degs[self.minf_initial_index]
 
 
     def calculate_distances(self, angle):
