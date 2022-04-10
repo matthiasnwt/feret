@@ -17,6 +17,33 @@ class Calculater():
         self.y0, self.x0 = ndimage.center_of_mass(self.contour)
 
 
+    def find_points(self):
+        """
+        Method find the points which are used to calcualte feret diameter
+
+        """
+
+        if self.edge:
+            ys, xs = np.nonzero(self.img)
+            new_xs = np.concatenate(
+                (xs+0.5, xs+0.5, xs-0.5, xs-0.5, xs, xs+0.5, xs-0.5, xs, xs))
+            new_ys = np.concatenate(
+                (ys+0.5, ys-0.5, ys+0.5, ys-0.5, ys, ys, ys, ys+0.5, ys-0.5))
+            
+            new_ys, new_xs = (new_ys*2).astype(int), (new_xs*2).astype(int)
+            new_points = np.array([new_ys, new_xs])
+
+            self.contour = np.zeros(
+                (self.img.shape[0] * 2, self.img.shape[1] * 2))
+            self.contour[tuple(new_points)] = 1
+        else:
+            self.contour = np.copy(self.img)
+
+        edm = ndimage.distance_transform_edt(self.contour)
+        self.contour[edm > 1] = 0
+        self.points = np.array(np.nonzero(self.contour))
+
+
     def calculate_maxferet(self):
         """
         The maxferet is defined as the maximum euclidean
@@ -52,31 +79,7 @@ class Calculater():
             self.minf /= 2
     
 
-    def find_points(self):
-        """
-        Method find the points which are used to calcualte feret diameter
-
-        """
-
-        if self.edge:
-            ys, xs = np.nonzero(self.img)
-            new_xs = np.concatenate((xs + 0.5, xs + 0.5, xs - 0.5, xs - 0.5, xs, xs + 0.5, xs - 0.5, xs, xs))
-            new_ys = np.concatenate((ys + 0.5, ys - 0.5, ys + 0.5, ys - 0.5, ys, ys, ys, ys + 0.5, ys - 0.5))
-            
-            new_ys, new_xs = (new_ys * 2).astype(int), (new_xs * 2).astype(int)
-            new_points = np.array([new_ys, new_xs])
-
-            self.contour = np.zeros((self.img.shape[0] * 2, self.img.shape[1] * 2))
-            self.contour[tuple(new_points)] = 1
-
-            edm = ndimage.distance_transform_edt(self.contour)
-            self.contour[edm > 1] = 0
-            self.points = np.array(np.nonzero(self.contour))
-        else:
-            self.contour = np.copy(self.img)
-            edm = ndimage.distance_transform_edt(self.contour)
-            self.contour[edm > 1] = 0
-            self.points = np.array(np.nonzero(self.contour))
+    
 
 
     def calculate_distances(self, angle):
