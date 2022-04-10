@@ -17,8 +17,6 @@ class Calculater():
         self.y0, self.x0 = ndimage.center_of_mass(self.contour)
 
 
-
-
     def calculate_maxferet(self):
         """
         The maxferet is defined as the maximum euclidean
@@ -47,7 +45,7 @@ class Calculater():
 
         """
 
-        self.calculate_ferets()
+        self.get_initial_minf_estimation()
         self.minimize_feret()
 
         if self.edge:
@@ -114,7 +112,7 @@ class Calculater():
         self.minf = res_minferet.fun
        
 
-    def calculate_ferets(self):
+    def get_initial_minf_estimation(self):
         """
         This method finds the initial guess for the minimum feret
         diameter.
