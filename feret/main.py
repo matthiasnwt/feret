@@ -5,6 +5,7 @@ import time, scipy.optimize
 from scipy.spatial.distance import pdist
 
 
+
 class Calculater():
 
     def __init__(self, img, edge):
