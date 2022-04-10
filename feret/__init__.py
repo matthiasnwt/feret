@@ -1,7 +1,7 @@
 
-from main import Calculater
+# from main import Calculater
 
-# from feret.main import Calculater
+from feret.main import Calculater
 import numpy as np
 
 def calc(img, edge=False):
@@ -20,9 +20,10 @@ def calc(img, edge=False):
         Calculater (object): calculator class.
     """
     feret_calc = Calculater(img, edge)
-    feret_calc.calculate_maxferet()
     feret_calc.calculate_minferet()
     feret_calc.calculate_minferet90()
+    feret_calc.calculate_maxferet()
+    feret_calc.calculate_maxferet90()
     return feret_calc
 
 
@@ -41,7 +42,7 @@ def all(img, edge=False):
     """
 
     feret_calc = calc(img, edge)
-    return feret_calc.maxf, feret_calc.minf, feret_calc.minf90
+    return feret_calc.maxf, feret_calc.minf, feret_calc.minf90, feret_calc.maxf90
 
 
 def max(img, edge=False):
@@ -97,7 +98,28 @@ def min90(img, edge=False):
     return feret_calc.minf90
 
 
+def max90(img, edge=False):
+    """
+    Calculate the approximated feret diameter 90  
+    degree (maxf90) to maximum feret diameter (minf).
+
+    Args:
+        img (numpy.ndarray): binary-image
+        edge (boolean): use edges (vertices) or centers
+
+    Returns:
+        maxf90 (float): maximum feret diameter 90 degree
+    """
+
+    feret_calc = Calculater(img, edge)
+    feret_calc.calculate_maxferet()
+    feret_calc.calculate_maxferet90()
+    return feret_calc.maxf90
+
+
 if __name__ == '__main__':
     img = np.load('img.npy')
-    maxf, minf, minf90 = all(img, edge=True)
-    print(maxf, minf, minf90)
+    maxf, minf, minf90, maxf90 = all(img)
+    print(maxf, minf, minf90, maxf90)
+    maxf90 = max90(img)
+    print(maxf90)
