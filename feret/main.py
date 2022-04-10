@@ -89,9 +89,10 @@ class Calculater():
 
         if not self.minf_angle in locals():
             self.calculate_minferet()
-
-        self.minf90 = self.calculate_distances(self.minf_angle + np.pi/2)
-    
+            
+        self.minf90_angle =self.minf_angle + np.pi/2
+        self.minf90 = self.calculate_distances(self.minf90_angle)
+        
 
     def minimize_feret(self):
         """
