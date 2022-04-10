@@ -19,6 +19,7 @@ def calc(img, edge=False):
     feret_calc = Calculater(img, edge)
     feret_calc.calculate_maxferet()
     feret_calc.calculate_minferet()
+    feret_calc.calculate_minferet90()
     return feret_calc
 
 
@@ -37,7 +38,7 @@ def all(img, edge=False):
     """
 
     feret_calc = calc(img, edge)
-    return feret_calc.maxf, feret_calc.minf
+    return feret_calc.maxf, feret_calc.minf, feret_calc.minf90
 
 
 def max(img, edge=False):
