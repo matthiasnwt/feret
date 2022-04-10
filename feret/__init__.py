@@ -3,11 +3,11 @@ import numpy as np
 
 def calc(img, edge=False):
     """
-    Calculate the true maximum feret diameter (minferet)
-    and the approximated minimum feret diameter (minferet).
+    Calculate the true maximum feret diameter (minf)
+    and the approximated minimum feret diameter (minf).
 
     result = calc(img)
-    maxferet, minferet = result.maxferet, result.minferet
+    maxf, minf = result.maxf, result.minf
 
     Args:
         img (numpy.ndarray): binary-image
@@ -24,57 +24,57 @@ def calc(img, edge=False):
 
 def all(img, edge=False):
     """
-    Calculate the true maximum feret diameter (minferet)
-    and the approximated minimum feret diameter (minferet).
+    Calculate the true maximum feret diameter (minf)
+    and the approximated minimum feret diameter (minf).
 
     Args:
         img (numpy.ndarray): binary-image
         edge (boolean): use edges (vertices) or centers
 
     Returns:
-        maxferet (float): maximum feret diameter
-        minferet (float): minimum feret diameter
+        maxf (float): maximum feret diameter
+        minf (float): minimum feret diameter
     """
 
     feret_calc = calc(img, edge)
-    return feret_calc.maxferet, feret_calc.minferet
+    return feret_calc.maxf, feret_calc.minf
 
 
 def max(img, edge=False):
     """
-    Calculate the true maximum feret diameter (minferet).
+    Calculate the true maximum feret diameter (minf).
 
     Args:
         img (numpy.ndarray): binary-image
         edge (boolean): use edges (vertices) or centers
 
     Returns:
-        maxferet (float): maximum feret diameter
+        maxf (float): maximum feret diameter
     """
 
     feret_calc = Calculater(img, edge)
     feret_calc.calculate_maxferet()
-    return feret_calc.maxferet
+    return feret_calc.maxf
 
 
 def min(img, edge=False):
     """
-    Calculate the approximated minimum feret diameter (minferet).
+    Calculate the approximated minimum feret diameter (minf).
 
     Args:
         img (numpy.ndarray): binary-image
         edge (boolean): use edges (vertices) or centers
 
     Returns:
-        minferet (float): minimum feret diameter
+        minf (float): minimum feret diameter
     """
 
     feret_calc = Calculater(img, edge)
     feret_calc.calculate_minferet()
-    return feret_calc.minferet
+    return feret_calc.minf
 
 
 if __name__ == '__main__':
     img = np.load('img.npy')
-    maxf = max(img)
-    print(maxf)
+    maxf, minf = all(img, edge=True)
+    print(maxf, minf)
