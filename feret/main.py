@@ -75,6 +75,22 @@ class Calculater():
 
         if self.edge:
             self.minf /= 2
+
+
+    def calculate_minferet90(self):
+        """
+        Method calculates the feret diameter which
+        is 90 degree to the minimum feret diameter.
+        It first checks if the angle of the minimum
+        feret diameter is already calculatet. If not
+        it calls the minferet function.
+
+        """
+
+        if not self.minf_angle in locals():
+            self.calculate_minferet()
+
+        self.minf90 = self.calculate_distances(self.minf_angle + np.pi/2)
     
 
     def minimize_feret(self):
