@@ -5,15 +5,12 @@ import time, scipy.optimize
 from scipy.spatial.distance import pdist
 
 
-
-
 class Calculater():
 
     def __init__(self, img, edge):
 
         self.img = img
         self.edge = edge
-
 
         self.find_points()
         self.y0, self.x0 = ndimage.center_of_mass(self.contour)
@@ -77,9 +74,6 @@ class Calculater():
             self.points = np.array(np.nonzero(self.contour))
 
 
-     
-
-
     def calculate_distances(self, angle):
         """ 
         Method calculates the distance of two points at a givin angle.
@@ -100,7 +94,8 @@ class Calculater():
 
     def minimize_feret(self):
         """
-
+        The approximated minferet is calcualted using
+        a minimazation with the angle.
 
         """
 
@@ -114,6 +109,8 @@ class Calculater():
 
     def calculate_ferets(self):
         """
+        This method finds the initial guess for the minimum feret
+        diameter.
 
 
         """
