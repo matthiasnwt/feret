@@ -134,6 +134,24 @@ class Calculater():
         self.minferet_angle = degs[self.minferet_index]
 
 
+    def calculate_distances(self, angle):
+        """ 
+        Method calculates the distance of two points at a givin angle.
+
+        """
+        m = np.tan(angle)
+        ds = np.cos(angle)*(self.y0-self.points[0])-np.sin(angle)*(self.x0-self.points[1])
+        max_i = np.argmax(ds)
+        min_i = np.argmin(ds)
+
+        t_max = self.points.T[max_i][0] - m * self.points.T[max_i][1]
+        t_min = self.points.T[min_i][0] - m * self.points.T[min_i][1]
+
+        feret = np.abs(t_max - t_min) / np.sqrt(1+m**2)
+
+        return feret
+
+
     def __call__(self):
         return self.maxf, self.minf
 
