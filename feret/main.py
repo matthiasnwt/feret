@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy import ndimage
 import time, scipy.optimize
-from scipy.spatial.distance import pdist
+from scipy.spatial.distance import pdist, squareform
 
 
 
@@ -18,6 +18,7 @@ class Calculater():
 
 
 
+
     def calculate_maxferet(self):
         """
         The maxferet is defined as the maximum euclidean
@@ -27,10 +28,15 @@ class Calculater():
 
         """
 
-        self.maxferet = max(pdist(self.points.T, "euclidean"))
+        pdists = pdist(self.points.T, "euclidean")
+
+        self.maxf = np.max(pdists)
+
+        maxf_coords_index = np.where(squareform(pdists) == self.maxf)[0]
+        self.maxf_coords = self.points.T[maxf_coords_index]
 
         if self.edge:
-            self.maxferet /= 2
+            self.maxf /= 2
 
 
     def calculate_minferet(self):
@@ -45,7 +51,7 @@ class Calculater():
         self.minimize_feret()
 
         if self.edge:
-            self.minferet /= 2
+            self.minf /= 2
     
 
     def find_points(self):
@@ -105,7 +111,7 @@ class Calculater():
             x0=self.minferet_angle,  
             bounds=((0., np.pi),))
 
-        self.minferet = res_minferet.fun
+        self.minf = res_minferet.fun
        
 
     def calculate_ferets(self):
@@ -128,10 +134,6 @@ class Calculater():
 
 
     def __call__(self):
-        return self.maxferet, self.minferet
+        return self.maxf, self.minf
 
-
-
-if __name__ == '__main__':
-    pass
 
