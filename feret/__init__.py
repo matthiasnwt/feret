@@ -3,6 +3,7 @@ from main import Calculater
 
 # from feret.main import Calculater
 import numpy as np
+import time
 
 def calc(img, edge=False):
     """
@@ -137,5 +138,10 @@ def min_analytical(img, edge=False):
 if __name__ == '__main__':
     img = np.load('img.npy')
 
-    minf = min_analytical(img)
-    print(minf)
+    t0 = time.perf_counter()
+    minf_new = min_analytical(img)
+    t1 = time.perf_counter()
+
+    minf = min(img)
+    print(t1 - t0, minf_new, minf)
+
