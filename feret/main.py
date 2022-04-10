@@ -126,22 +126,27 @@ class Calculater():
         self.minf_angle = degs[self.minf_initial_index]
 
 
-    def calculate_distances(self, angle):
+    def calculate_distances(self, a):
         """ 
         Method calculates the distance of two points at a givin angle.
 
+        Args:
+            a (float): angle (in rad)
+
+        Returns:
+            distance (float): caliper distance for angle a
         """
-        m = np.tan(angle)
-        ds = np.cos(angle)*(self.y0-self.points[0])-np.sin(angle)*(self.x0-self.points[1])
+        m = np.tan(a)
+        ds = np.cos(a)*(self.y0-self.points[0])-np.sin(a)*(self.x0-self.points[1])
         max_i = np.argmax(ds)
         min_i = np.argmin(ds)
 
         t_max = self.points.T[max_i][0] - m * self.points.T[max_i][1]
         t_min = self.points.T[min_i][0] - m * self.points.T[min_i][1]
 
-        feret = np.abs(t_max - t_min) / np.sqrt(1+m**2)
+        distance = np.abs(t_max - t_min) / np.sqrt(1+m**2)
 
-        return feret
+        return distance
 
 
     def __call__(self):
