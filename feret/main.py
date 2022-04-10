@@ -106,14 +106,12 @@ class Calculater():
             bounds=((0., np.pi),))
 
         self.minf = res_minferet.fun
-        self.minf_angle = res_minferet.x
-       
+        self.minf_angle = res_minferet.x[0]
 
     def get_initial_minf_estimation(self):
         """
         This method finds the initial guess for the minimum feret
         diameter.
-
 
         """
         degs = np.deg2rad(np.arange(0, 180.1, 0.1))
