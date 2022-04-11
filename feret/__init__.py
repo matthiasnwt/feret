@@ -120,11 +120,13 @@ def max90(img, edge=False):
 
 
 # if __name__ == '__main__':
-#     img = np.load('img.npy')
+#     # img = np.load('img.npy')
 #     img = tif.imread('126_binary_verrgroessert.tif')
 
 #     t0 = time.perf_counter()
 #     minf = min(img, edge=True)
+#     # minf = min(img, edge=True)
+
 #     t1 = time.perf_counter()
 
 #     maxf = max(img, edge=True)

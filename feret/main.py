@@ -11,8 +11,22 @@ class Calculater():
         self.img = img
         self.edge = edge
 
-        self.find_points()
-        self.y0, self.x0 = ndimage.center_of_mass(self.contour)
+        self.find_convexhull()
+        self.y0, self.x0 = ndimage.center_of_mass(self.hull)
+
+    def find_convexhull(self):
+        # Method calculates convexhull.
+        # If edge flag is set, it uses the corners not centers
+        if self.edge:
+            ys, xs = np.nonzero(self.img)
+            new_xs = np.concatenate(
+                (xs+0.5, xs+0.5, xs-0.5, xs-0.5, xs, xs+0.5, xs-0.5, xs, xs))
+            new_ys = np.concatenate(
+                (ys+0.5, ys-0.5, ys+0.5, ys-0.5, ys, ys, ys, ys+0.5, ys-0.5))
+            new_ys, new_xs = (new_ys*2).astype(int), (new_xs*2).astype(int)
+            self.hull = cv.convexHull(np.array([new_ys, new_xs]).T).T.reshape(2, -1)
+        else:
+            self.hull = cv.convexHull(np.transpose(np.nonzero(self.img))).T.reshape(2, -1)
 
 
     def calculate_minferet(self):
@@ -21,8 +35,6 @@ class Calculater():
         The result is equal to imagejs minferet.
 
         """
-
-
         length = len(self.hull.T)
 
         Ds = np.empty(length)
@@ -53,37 +65,6 @@ class Calculater():
             self.minf /= 2
 
 
-
-
-    def find_points(self):
-        """
-        Method find the points which are used to calcualte feret diameter
-
-        """
-
-        if self.edge:
-            ys, xs = np.nonzero(self.img)
-            new_xs = np.concatenate(
-                (xs+0.5, xs+0.5, xs-0.5, xs-0.5, xs, xs+0.5, xs-0.5, xs, xs))
-            new_ys = np.concatenate(
-                (ys+0.5, ys-0.5, ys+0.5, ys-0.5, ys, ys, ys, ys+0.5, ys-0.5))
-            
-            new_ys, new_xs = (new_ys*2).astype(int), (new_xs*2).astype(int)
-            new_points = np.array([new_ys, new_xs])
-
-            self.contour = np.zeros(
-                (self.img.shape[0] * 2, self.img.shape[1] * 2))
-            self.contour[tuple(new_points)] = 1
-        else:
-            self.contour = np.copy(self.img)
-
-        # Find contour of img.
-        edm = ndimage.distance_transform_edt(self.contour)
-        self.contour[edm > 1] = 0
-        self.points = np.array(np.nonzero(self.contour))
-        self.hull = cv.convexHull(self.points.T).T.reshape(2, -1)
-        
-
     def calculate_maxferet(self):
         """
         The maxferet is defined as the maximum euclidean
@@ -97,7 +78,7 @@ class Calculater():
         self.maxf = np.max(pdists)
 
         maxf_coords_index = np.where(squareform(pdists) == self.maxf)[0]
-        self.maxf_coords = self.points.T[maxf_coords_index]
+        self.maxf_coords = self.hull.T[maxf_coords_index]
 
         ((y0, x0), (y1, x1)) = self.maxf_coords
 
@@ -153,19 +134,13 @@ class Calculater():
             distance (float): caliper distance for angle a
         """
         m = np.tan(a)
-        ds = np.cos(a)*(self.y0-self.points[0])-np.sin(a)*(self.x0-self.points[1])
+        ds = np.cos(a)*(self.y0-self.hull[0])-np.sin(a)*(self.x0-self.hull[1])
         max_i = np.argmax(ds)
         min_i = np.argmin(ds)
 
-        t_max = self.points.T[max_i][0] - m * self.points.T[max_i][1]
-        t_min = self.points.T[min_i][0] - m * self.points.T[min_i][1]
+        t_max = self.hull.T[max_i][0] - m * self.hull.T[max_i][1]
+        t_min = self.hull.T[min_i][0] - m * self.hull.T[min_i][1]
 
         distance = np.abs(t_max - t_min) / np.sqrt(1+m**2)
 
         return distance
-
-
-    def __call__(self):
-        return self.maxf, self.minf
-
-
