@@ -44,10 +44,13 @@ class Calculater():
         for i in range(length):
             p1 = self.hull.T[i]
             p2 = self.hull.T[(i+1) % length]
+            
             ds = np.abs(np.cross(p2-p1, p1-self.hull.T)/norm(p2-p1))
-            Ds[i] = np.max(ds)
+
             d_i = np.where(ds == Ds[i])[0][0]
             p3 = self.hull.T[d_i]
+
+            Ds[i] = np.max(ds)
             ps[i] = np.array((p1, p2, p3))
 
         self.minf = np.min(Ds)
