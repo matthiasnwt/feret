@@ -7,23 +7,27 @@ This python module can calculate the following parameters for binary images:
 * Feret diameter 90 ° to the minferet (minferet90, minf90) 
 * Feret diameter 90 ° to maxferet (maxferet90, maxf90) 
 
-See this [Wikipedia page](https://en.wikipedia.org/wiki/Feret_diameter) to get a the definition of those parameters.
+See this [Wikipedia page](https://en.wikipedia.org/wiki/Feret_diameter) to get the definition of those parameters.
+
+This module gives the exact results as ImageJ, all the parameters are exactly calculated and **not** approximated.
 
 ## Installation
 This project is available via pip:
 
 `pip install feret`
 
-## Informations
+## Pieces of Information
+
+#### Convex Hull
+
+The definition of the maxferet and minferet uses the image of a caliper. Therefore, only the points which correspond to the convex hull of the object play a role. That is why before any calculations the convex hull is determined to reduce the runtime.
 
 #### Maxferet
 The maxferet is calculated as the maximum Euclidean distance of all pixels.
 
 #### Minferet
-The minferet is only approximated in two steps at the moment. First, the distance of to parallel lines, which surround the object, is calculated for all angles from 0° to 180°. The minimum of this first calculation is used as the initial guess for a minimization algorithm, which is the second part of the approximation. Even if this method is not perfect, the difference to the true minferet can be neglected in most cases.
 
-
-At this early development stage, it can only calculate the maximum and minimum Feret Diameter but feature releases will offer the Feret diameter 90° to maximum and minimum. The module will also not return the angle of the diameters. Many things will come in the future.
+The minferet is exactly calculated and **not** approximated. My algorithm uses the fact, that the calipers that define the minferet run on one side through two points and on the other through one point. The script iterates over all edge points and defines a line through the point and the one next to it. Then all the distances to the other points are calculated and the maximum is taken. The minimum of all those maximums is the minferet. The maximum of all those maximums is **not** the maxferet, that is the reason it is calculated separately. The runtime of this is already pretty good but hopefully I can improve it in the future.
 
 ## Use
 The module can be used as followed:
@@ -75,3 +79,7 @@ img = tif.imread('example.tif') # Image has to be a numpy 2d-array.
 maxf = feret.max(img, edge=True)
 ```
 
+### Future Releases
+
+* add a return_angle in the calls
+* add the possibility to show plots of the results
