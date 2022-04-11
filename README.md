@@ -9,9 +9,9 @@ This python module can calculate the following parameters for binary images:
 
 See this [Wikipedia page](https://en.wikipedia.org/wiki/Feret_diameter) to get the definition of those parameters.
 
-This module gives the exact results as ImageJ, all the parameters are exactly calculated and **not** approximated.
+This module gives the exact results as ImageJ (use `edge=True` as shown below), all the parameters are exactly calculated and **not** approximated.
 
-## Installation
+## Installations
 This project is available via pip:
 
 `pip install feret`
