@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "feret"
-version = "1.0.2"
+version = "1.0.3"
 description = "Calculate Feret diameter."
 authors = ["matthiasnwt <62239991+matthiasnwt@users.noreply.github.com>"]
 license = "MIT"
@@ -13,7 +13,7 @@ homepage = "https://github.com/matthiasnwt/feret"
 keywords = ["feret", "maxferet", "diameter", "maximum", "caliper"]
 
 classifiers = [
-	"Development Status :: 4 - Beta",
+	"Development Status :: 5 - Production/Stable",
 	"Operating System :: Microsoft :: Windows",
 	"Operating System :: Unix",
 	"Operating System :: MacOS",
