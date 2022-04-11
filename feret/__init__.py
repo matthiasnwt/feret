@@ -4,6 +4,7 @@ from main import Calculater
 # from feret.main import Calculater
 import numpy as np
 import time
+import tifffile as tif
 
 def calc(img, edge=False):
     """
@@ -118,30 +119,15 @@ def max90(img, edge=False):
     return feret_calc.maxf90
 
 
-def min_analytical(img, edge=False):
-    """
-    Calculate the anayltical minimum feret diameter (minf).
-
-    Args:
-        img (numpy.ndarray): binary-image
-        edge (boolean): use edges (vertices) or centers
-
-    Returns:
-        minf (float): minimum feret diameter
-    """
-
-    feret_calc = Calculater(img, edge)
-    feret_calc.calculate_minferet_analytical()
-    return feret_calc.minf
-
-
 if __name__ == '__main__':
     img = np.load('img.npy')
+    img = tif.imread('126_binary_verrgroessert.tif')
 
     t0 = time.perf_counter()
-    minf_new = min_analytical(img)
+    minf = min(img, edge=True)
     t1 = time.perf_counter()
 
-    minf = min(img)
-    print(t1 - t0, minf_new, minf)
+    maxf = max(img, edge=True)
+    t2 = time.perf_counter()
+    print(t1 - t0, t2-t1, minf, maxf)
 
