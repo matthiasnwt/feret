@@ -1,5 +1,7 @@
 # *Feret*: A Python Module to calculate the Feret Diameter of Binary Images
 
+[![Downloads](https://static.pepy.tech/personalized-badge/feret?period=total&units=abbreviation&left_color=black&right_color=red&left_text=Downloads)](https://pepy.tech/project/feret)
+
 This python module can calculate the following parameters for binary images:
 
 * maximum Feret diameter (maxferet, maxf)
