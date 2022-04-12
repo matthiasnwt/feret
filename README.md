@@ -34,6 +34,10 @@ The minferet is exactly calculated and **not** approximated. My algorithm uses t
 ## Use
 The module can be used as followed:
 
+First you need a binary image for which the feret diameter should be calculated. The background has to have the value zero, the object can have any nonzero  value. The object doesn't have to be convex. At the moment the module only supports one object per image.This means, that if there are multiple not connected regions, the script will calculate a convexhull which include all regions and for this hull the feret diameter is calculated.
+
+Thr calls are:
+
 ```python
 import feret
 
