@@ -2,9 +2,7 @@
 # from main import Calculater
 
 from feret.main import Calculater
-# import numpy as np
-# import time
-# import tifffile as tif
+
 
 def calc(img, edge=False):
     """
@@ -120,8 +118,13 @@ def max90(img, edge=False):
 
 
 # if __name__ == '__main__':
+
+#     import numpy as np
+#     import time
+#     import tifffile as tif
 #     # img = np.load('img.npy')
 #     img = tif.imread('126_binary_verrgroessert.tif')
+    
 
 #     t0 = time.perf_counter()
 #     minf = min(img, edge=True)
