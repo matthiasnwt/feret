@@ -63,6 +63,8 @@ class Calculater():
         m = (y0 - y1) / (x0 - x1)
         t = y0 - m * x0
 
+        self.minf_coords = np.array(((y0, x0), (y1, x1), (y2, x2)))
+
         self.minf_angle = np.arctan(m)
 
         if self.edge:
