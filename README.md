@@ -1,6 +1,6 @@
 # *Feret*: A Python Module to calculate the Feret Diameter of Binary Images
 
-<img src="docs\plot_method.png" style="zoom: 33%;" />
+<img src="README.assets\plot_method.png" style="zoom: 33%;" />
 
 This python module can calculate the following parameters for binary images:
 
@@ -98,6 +98,6 @@ img = tif.imread('example.tif') # Image has to be a numpy 2d-array.
 feret.plot(img) #edge=True can be passed here too
 ```
 
-<img src="docs\plot_method.png" style="zoom: 33%;" />
+<img src="README.assets\plot_method.png" style="zoom: 33%;" />
 
 The reason for the two MinFeret points on the left is described above. The MinFeret line does not have to run in between its two base points or through one of them. MaxFeret and MinFeret do not have to be 90° to each other. To calculate the 90° to MaxFeret and MinFeret use `feret.max90(img)` and `feret.min90(img)` methods.
