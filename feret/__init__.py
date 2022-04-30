@@ -1,4 +1,4 @@
-
+# 
 # from main import Calculater
 
 from feret.main import Calculater
@@ -43,6 +43,19 @@ def all(img, edge=False):
 
     feret_calc = calc(img, edge)
     return feret_calc.maxf, feret_calc.minf, feret_calc.minf90, feret_calc.maxf90
+
+
+def plot(img, edge=False):
+    """
+    Plot of the results.
+
+    Args:
+        img (numpy.ndarray): binary-image
+        edge (boolean): use edges (vertices) or centers
+
+    """
+    feret_calc = calc(img, edge)
+    feret_calc.plot()
 
 
 def max(img, edge=False):
@@ -123,16 +136,13 @@ def max90(img, edge=False):
 #     import time
 #     import tifffile as tif
 #     # img = np.load('img.npy')
+#     img = tif.imread('11300_binary_verrgroessert.tif').T
 #     img = tif.imread('126_binary_verrgroessert.tif')
     
 
-#     t0 = time.perf_counter()
-#     minf = min(img, edge=True)
-#     # minf = min(img, edge=True)
+#     res = plot(img, edge=True)
 
-#     t1 = time.perf_counter()
+#     print(res.maxf_coords)
 
-#     maxf = max(img, edge=True)
-#     t2 = time.perf_counter()
-#     print(t1 - t0, t2-t1, minf, maxf)
+
 

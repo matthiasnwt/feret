@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "feret"
-version = "1.1.2"
-description = "Calculate Feret diameter."
+version = "1.2.6"
+description = "Calculate the maximum and minimum Feret diameter."
 authors = ["matthiasnwt <62239991+matthiasnwt@users.noreply.github.com>"]
 license = "MIT"
 readme = "README.md"
@@ -10,7 +10,7 @@ readme = "README.md"
 repository = "https://github.com/matthiasnwt/feret"
 homepage = "https://github.com/matthiasnwt/feret"
 
-keywords = ["feret", "feretdiameter", "maxferet", "diameter", "maximum", "caliper", "caliper diameter", "python", "minferet", "minimum"]
+keywords = ["feret", "feretdiameter", "maxferet", "diameter", "maximum", "caliper", "caliper diameter", "python", "minferet", "minimum", "feret diameter"]
 
 classifiers = [
 	"Development Status :: 5 - Production/Stable",

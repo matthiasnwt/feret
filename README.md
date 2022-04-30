@@ -2,6 +2,8 @@
 
 ![Downloads](https://pepy.tech/badge/feret)
 
+<img src="README.assets\plot_method-16513036286243.png" style="zoom: 33%;" />
+
 This python module can calculate the following parameters for binary images:
 
 * maximum Feret diameter (maxferet, maxf)
@@ -85,7 +87,19 @@ img = tif.imread('example.tif') # Image has to be a numpy 2d-array.
 maxf = feret.max(img, edge=True)
 ```
 
-### Future Releases
+This module can also plot the result. Just use
 
-* add a return_angle in the calls
-* add the possibility to show plots of the results
+```python
+import feret
+
+# tifffile is not required nor included in this module.
+import tifffile as tif
+img = tif.imread('example.tif') # Image has to be a numpy 2d-array.
+
+# plot the result
+feret.plot(img) #edge=True can be passed here too
+```
+
+<img src="README.assets\plot_method-16513036286243.png" style="zoom: 33%;" />
+
+The reason for the two MinFeret points on the left is described above. The MinFeret line does not have to run in between its two base points or through one of them. MaxFeret and MinFeret do not have to be 90° to each other. To calculate the 90° to MaxFeret and MinFeret use `feret.max90(img)` and `feret.min90(img)` methods.

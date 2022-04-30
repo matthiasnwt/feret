@@ -8,7 +8,7 @@ import cv2 as cv
 
 class Calculater():
     def __init__(self, img, edge):
-        self.img = img
+        self.img = img.astype(float)
         self.edge = edge
 
         self.find_convexhull()
@@ -24,9 +24,56 @@ class Calculater():
             new_ys = np.concatenate(
                 (ys+0.5, ys-0.5, ys+0.5, ys-0.5, ys, ys, ys, ys+0.5, ys-0.5))
             new_ys, new_xs = (new_ys*2).astype(int), (new_xs*2).astype(int)
-            self.hull = cv.convexHull(np.array([new_ys, new_xs]).T).T.reshape(2, -1)
+            self.hull = cv.convexHull(np.array([new_ys, new_xs]).T).T.reshape(2, -1).astype(float)
         else:
-            self.hull = cv.convexHull(np.transpose(np.nonzero(self.img))).T.reshape(2, -1)
+            self.hull = cv.convexHull(np.transpose(np.nonzero(self.img))).T.reshape(2, -1).astype(float)
+
+
+    def plot(self):
+        """
+        This method plots the particle, the maxferet and minferet coordiantes
+        and the lines which run through the maxferet and minferet.
+
+        """
+        ymax, xmax = self.img.shape
+
+        xs = np.linspace(0, xmax, 2)
+
+        minf_ys = np.tan(self.minf_angle) * xs + self.minf_t
+        maxf_ys = np.tan(self.maxf_angle) * xs + self.maxf_t
+
+        minf_base_m = (self.minf_coords.T[0][0]-self.minf_coords.T[0][1])/(self.minf_coords.T[1][0]-self.minf_coords.T[1][1])
+        minf_base_t = self.minf_coords.T[0][0] - minf_base_m*self.minf_coords.T[1][0]
+        minf_anker_t = self.minf_coords.T[0][2] - minf_base_m*self.minf_coords.T[1][2]
+
+        minf_base_ys = minf_base_m*xs + minf_base_t
+        minf_anker_ys = minf_base_m*xs + minf_anker_t
+
+        maxf_base_t = self.maxf_coords.T[0][0] - np.tan(self.maxf_angle + np.pi/2) * self.maxf_coords.T[1][0]
+        maxf_anker_t = self.maxf_coords.T[0][1] - np.tan(self.maxf_angle + np.pi/2) * self.maxf_coords.T[1][1]
+
+        maxf_base_ys = np.tan(self.maxf_angle + np.pi/2)* xs + maxf_base_t
+        maxf_anker_ys = np.tan(self.maxf_angle + np.pi/2)* xs + maxf_anker_t
+
+
+        plt.figure(dpi=100, figsize=(10, 10))
+        plt.title(f'MinFeret: {self.minf:.6f} ||| MaxFeret: {self.maxf:.6f}')
+        plt.imshow(self.img, origin='lower')
+
+        plt.scatter(self.maxf_coords.T[1], self.maxf_coords.T[0], label='MaxFeret Coordinates')
+        plt.plot(xs, maxf_ys, color='green', label='Maxferet Line')
+        plt.plot(xs, maxf_base_ys, linestyle='--', color='green', label='MaxFeret Baseline')
+        plt.plot(xs, maxf_anker_ys, linestyle='--', color='green')
+
+        plt.scatter(self.minf_coords.T[1], self.minf_coords.T[0], label='MinFeret Coordinates')
+        plt.plot(xs, minf_ys, color='orange', label='Minferet Line')
+        plt.plot(xs, minf_base_ys, linestyle='--', color='orange', label='MinFeret Baseline')
+        plt.plot(xs, minf_anker_ys, linestyle='--', color='orange')
+        plt.ylim(0, ymax)
+        plt.xlim(0, xmax)
+        plt.legend()
+        plt.show()
+
 
 
     def calculate_minferet(self):
@@ -63,12 +110,19 @@ class Calculater():
         m = (y0 - y1) / (x0 - x1)
         t = y0 - m * x0
 
-        self.minf_coords = np.array(((y0, x0), (y1, x1), (y2, x2)))
+        self.minf_coords = np.array(((y0, x0), (y1, x1), (y2, x2))) 
 
-        self.minf_angle = np.arctan(m)
+        self.minf_angle = np.arctan(m) + np.pi/2
+
+        if self.minf_angle < 0:
+            self.minf_angle += np.pi
 
         if self.edge:
-            self.minf /= 2
+            self.minf /= 2.
+            self.minf_coords /= 2.
+
+        self.minf_t = self.minf_coords.T[0][2] - np.tan(self.minf_angle) * self.minf_coords.T[1][2]
+        
 
 
     def calculate_maxferet(self):
@@ -84,17 +138,34 @@ class Calculater():
         self.maxf = np.max(pdists)
 
         maxf_coords_index = np.where(squareform(pdists) == self.maxf)[0]
-        self.maxf_coords = self.hull.T[maxf_coords_index]
+
+        # If there are more then one maxferet-combination, this two lines
+        # sort them in x and y and chooses the first element.
+        maxf_coords_index_y = maxf_coords_index[:len(maxf_coords_index)//2][0]
+        maxf_coords_index_x = maxf_coords_index[len(maxf_coords_index)//2:][0]
+
+        self.maxf_coords = self.hull.T[np.array((maxf_coords_index_x, maxf_coords_index_y))]
+
 
         ((y0, x0), (y1, x1)) = self.maxf_coords
 
         m = (y0 - y1) / (x0 - x1)
         t = y0 - m * x0
 
-        self.maxf_angle = np.arctan(m) + np.pi/2
+        self.maxf_angle = np.arctan(m)
+
+
+
+        if self.maxf_angle < 0:
+            self.maxf_angle += np.pi
+
 
         if self.edge:
-            self.maxf /= 2
+            self.maxf /= 2.
+            self.maxf_coords /= 2
+
+        self.maxf_t = self.maxf_coords.T[0][1] - np.tan(self.maxf_angle) * self.maxf_coords.T[1][1]
+
 
 
     def calculate_maxferet90(self):
