@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "feret"
-version = "1.2.7"
+version = "1.2.8"
 description = "Calculate the maximum and minimum Feret diameter."
 authors = ["matthiasnwt <62239991+matthiasnwt@users.noreply.github.com>"]
 license = "MIT"
