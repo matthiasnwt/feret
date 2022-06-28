@@ -1,7 +1,9 @@
-# 
-# from main import Calculater
+#
+from matplotlib import pyplot as plt
 
-from feret.main import Calculater
+from main import Calculater
+
+# from feret.main import Calculater
 
 
 def calc(img, edge=False):
@@ -130,17 +132,22 @@ def max90(img, edge=False):
     return feret_calc.maxf90
 
 
-# if __name__ == '__main__':
+if __name__ == '__main__':
 
-#     import numpy as np
-#     import time
-#     import tifffile as tif
-#     # img = np.load('img.npy')
-#     img = tif.imread('10243_binary.tif')
-#     # img = tif.imread('126_binary_verrgroessert.tif')
+    import numpy as np
+    import time
+    import tifffile as tif
+    # img = np.load('img.npy')
+    img = tif.imread('10243_binary.tif')
+    # img = tif.imread('126_binary_verrgroessert.tif')
+
+    max90(img)
+
+    plt.imshow(img, cmap='gray')
+    plt.show()
     
 
-#     plot(img, edge=True)
+    # plot(img, edge=True)
 
 
 
