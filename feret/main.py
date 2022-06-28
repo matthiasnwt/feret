@@ -35,40 +35,56 @@ class Calculater():
         and the lines which run through the maxferet and minferet.
 
         """
-        ymax, xmax = self.img.shape
-
-        xs = np.linspace(0, xmax, 2)
-
-        minf_ys = np.tan(self.minf_angle) * xs + self.minf_t
-        maxf_ys = np.tan(self.maxf_angle) * xs + self.maxf_t
-
-        minf_base_m = (self.minf_coords.T[0][0]-self.minf_coords.T[0][1])/(self.minf_coords.T[1][0]-self.minf_coords.T[1][1])
-        minf_base_t = self.minf_coords.T[0][0] - minf_base_m*self.minf_coords.T[1][0]
-        minf_anker_t = self.minf_coords.T[0][2] - minf_base_m*self.minf_coords.T[1][2]
-
-        minf_base_ys = minf_base_m*xs + minf_base_t
-        minf_anker_ys = minf_base_m*xs + minf_anker_t
-
-        maxf_base_t = self.maxf_coords.T[0][0] - np.tan(self.maxf_angle + np.pi/2) * self.maxf_coords.T[1][0]
-        maxf_anker_t = self.maxf_coords.T[0][1] - np.tan(self.maxf_angle + np.pi/2) * self.maxf_coords.T[1][1]
-
-        maxf_base_ys = np.tan(self.maxf_angle + np.pi/2)* xs + maxf_base_t
-        maxf_anker_ys = np.tan(self.maxf_angle + np.pi/2)* xs + maxf_anker_t
-
 
         plt.figure(dpi=100, figsize=(10, 10))
         plt.title(f'MinFeret: {self.minf:.6f} ||| MaxFeret: {self.maxf:.6f}')
         plt.imshow(self.img, origin='lower')
 
-        plt.scatter(self.maxf_coords.T[1], self.maxf_coords.T[0], label='MaxFeret Coordinates')
-        plt.plot(xs, maxf_ys, color='green', label='Maxferet Line')
-        plt.plot(xs, maxf_base_ys, linestyle='--', color='green', label='MaxFeret Baseline')
-        plt.plot(xs, maxf_anker_ys, linestyle='--', color='green')
+        ymax, xmax = self.img.shape
+        xs = np.linspace(0, xmax, 2)
 
+
+        if self.minf_angle == np.pi/2:
+            plt.axvline(self.minf_coords.T[1][0], linestyle='--', color='orange', label='MinFeret Baseline')
+            plt.axvline(self.minf_coords.T[1][2], linestyle='--', color='orange')
+            plt.axhline(self.minf_coords.T[0][2], color='orange', label='Minferet Line')
+        else:
+            minf_ys = np.tan(self.minf_angle) * xs + self.minf_t
+            minf_base_m = (self.minf_coords.T[0][0]-self.minf_coords.T[0][1])/(self.minf_coords.T[1][0]-self.minf_coords.T[1][1])
+            minf_base_t = self.minf_coords.T[0][0] - minf_base_m*self.minf_coords.T[1][0]
+            minf_anker_t = self.minf_coords.T[0][2] - minf_base_m*self.minf_coords.T[1][2]
+
+            minf_base_ys = minf_base_m*xs + minf_base_t
+            minf_anker_ys = minf_base_m*xs + minf_anker_t
+
+            plt.plot(xs, minf_base_ys, linestyle='--', color='orange', label='MinFeret Baseline')
+            plt.plot(xs, minf_anker_ys, linestyle='--', color='orange')
+            plt.plot(xs, minf_ys, color='orange', label='Minferet Line')
+
+
+        if self.maxf_angle == np.pi/2:
+            plt.axvline(self.maxf_coords.T[1][0], linestyle='--', color='orange', label='MaxFeret Baseline')
+            plt.axvline(self.maxf_coords.T[1][1], linestyle='--', color='orange')
+            plt.axhline(self.maxf_coords.T[0][1], color='orange', label='Maxferet Line')
+        else:
+            maxf_ys = np.tan(self.maxf_angle) * xs + self.maxf_t
+
+            maxf_base_t = self.maxf_coords.T[0][0] - np.tan(self.maxf_angle + np.pi/2) * self.maxf_coords.T[1][0]
+            maxf_anker_t = self.maxf_coords.T[0][1] - np.tan(self.maxf_angle + np.pi/2) * self.maxf_coords.T[1][1]
+
+            maxf_base_ys = np.tan(self.maxf_angle + np.pi/2)* xs + maxf_base_t
+            maxf_anker_ys = np.tan(self.maxf_angle + np.pi/2)* xs + maxf_anker_t
+
+            plt.plot(xs, maxf_ys, color='green', label='Maxferet Line')
+            plt.plot(xs, maxf_base_ys, linestyle='--', color='green', label='MaxFeret Baseline')
+            plt.plot(xs, maxf_anker_ys, linestyle='--', color='green')
+
+
+        
+
+        plt.scatter(self.maxf_coords.T[1], self.maxf_coords.T[0], label='MaxFeret Coordinates')
         plt.scatter(self.minf_coords.T[1], self.minf_coords.T[0], label='MinFeret Coordinates')
-        plt.plot(xs, minf_ys, color='orange', label='Minferet Line')
-        plt.plot(xs, minf_base_ys, linestyle='--', color='orange', label='MinFeret Baseline')
-        plt.plot(xs, minf_anker_ys, linestyle='--', color='orange')
+
         plt.ylim(0, ymax)
         plt.xlim(0, xmax)
         plt.legend()
@@ -107,12 +123,15 @@ class Calculater():
 
         (y0, x0), (y1, x1), (y2, x2) = ps[minf_index]
 
-        m = (y0 - y1) / (x0 - x1)
-        t = y0 - m * x0
+        if x0 == x1:
+            self.minf_angle = np.pi/2
+        else:
+            m = (y0 - y1) / (x0 - x1)
+            t = y0 - m * x0
+            self.minf_angle = np.arctan(m) + np.pi/2
 
         self.minf_coords = np.array(((y0, x0), (y1, x1), (y2, x2))) 
 
-        self.minf_angle = np.arctan(m) + np.pi/2
 
         if self.minf_angle < 0:
             self.minf_angle += np.pi
@@ -121,7 +140,10 @@ class Calculater():
             self.minf /= 2.
             self.minf_coords /= 2.
 
-        self.minf_t = self.minf_coords.T[0][2] - np.tan(self.minf_angle) * self.minf_coords.T[1][2]
+        if x0 == x1:
+            self.minf_t = -np.inf
+        else:
+            self.minf_t = self.minf_coords.T[0][2] - np.tan(self.minf_angle) * self.minf_coords.T[1][2]
         
 
 
@@ -149,10 +171,13 @@ class Calculater():
 
         ((y0, x0), (y1, x1)) = self.maxf_coords
 
-        m = (y0 - y1) / (x0 - x1)
-        t = y0 - m * x0
+        if x1 == x0:
+            self.maxf_angle = np.pi/2
+        else:
+            m = (y0 - y1) / (x0 - x1)
+            t = y0 - m * x0
 
-        self.maxf_angle = np.arctan(m)
+            self.maxf_angle = np.arctan(m)
 
 
 
@@ -164,7 +189,10 @@ class Calculater():
             self.maxf /= 2.
             self.maxf_coords /= 2
 
-        self.maxf_t = self.maxf_coords.T[0][1] - np.tan(self.maxf_angle) * self.maxf_coords.T[1][1]
+        if x1 == x0:
+            self.maxf_t = -np.inf
+        else:
+            self.maxf_t = self.maxf_coords.T[0][1] - np.tan(self.maxf_angle) * self.maxf_coords.T[1][1]
 
 
 
