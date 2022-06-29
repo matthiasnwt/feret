@@ -1,5 +1,5 @@
 #
-# from matplotlib import pyplot as plt
+from matplotlib import pyplot as plt
 
 # from main import Calculater
 
@@ -137,9 +137,9 @@ def max90(img, edge=False):
 #     import time
 #     import tifffile as tif
 #     # img = np.load('img.npy')
-#     img = tif.imread('10243_binary.tif')
-#     # img = tif.imread('126_binary_verrgroessert.tif')
+#     img = tif.imread('10243_binary.tif').T
+#     img = tif.imread('11300_binary_verrgroessert.tif')
 #
-#     plot(img)
+#     plot(img, edge=True)
 #
-#     min90(img)
+    # print(min90(img))
