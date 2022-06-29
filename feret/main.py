@@ -30,7 +30,7 @@ class Calculater():
 
     def plot(self):
         """
-        This method plots the particle, the maxferet and minferet coordiantes
+        This method plots the particle, the maxferet and minferet coordinates
         and the lines which run through the maxferet and minferet.
 
         """
@@ -42,14 +42,14 @@ class Calculater():
         ymax, xmax = self.img.shape
         xs = np.linspace(0, xmax, 2)
 
-        if self.minf_angle == np.pi / 2:
+        if self.minf_angle == 0:
             plt.axvline(self.minf_coords.T[1][0], linestyle='--', color='orange', label='MinFeret Baseline')
             plt.axvline(self.minf_coords.T[1][2], linestyle='--', color='orange')
             plt.axhline(self.minf_coords.T[0][2], color='orange', label='Minferet Line')
         else:
             minf_ys = np.tan(self.minf_angle) * xs + self.minf_t
             minf_base_m = (self.minf_coords.T[0][0] - self.minf_coords.T[0][1]) / (
-                        self.minf_coords.T[1][0] - self.minf_coords.T[1][1])
+                    self.minf_coords.T[1][0] - self.minf_coords.T[1][1])
             minf_base_t = self.minf_coords.T[0][0] - minf_base_m * self.minf_coords.T[1][0]
             minf_anker_t = self.minf_coords.T[0][2] - minf_base_m * self.minf_coords.T[1][2]
 
@@ -79,6 +79,11 @@ class Calculater():
 
         plt.scatter(self.maxf_coords.T[1], self.maxf_coords.T[0], label='MaxFeret Coordinates')
         plt.scatter(self.minf_coords.T[1], self.minf_coords.T[0], label='MinFeret Coordinates')
+
+        plt.scatter(self.minf90_coords.T[1], self.minf90_coords.T[0], marker='x', color='orange', s=150,
+                    label='MinFeret 90 Coordinates')
+        plt.scatter(self.maxf90_coords.T[1], self.maxf90_coords.T[0], marker='x', s=150, color='green',
+                    label='MaxFeret 90 Coordinates')
 
         plt.ylim(0, ymax)
         plt.xlim(0, xmax)
@@ -115,7 +120,7 @@ class Calculater():
         (y0, x0), (y1, x1), (y2, x2) = ps[minf_index]
 
         if x0 == x1:
-            self.minf_angle = np.pi / 2
+            self.minf_angle = 0
         else:
             m = (y0 - y1) / (x0 - x1)
             t = y0 - m * x0
@@ -149,7 +154,7 @@ class Calculater():
 
         maxf_coords_index = np.where(squareform(pdists) == self.maxf)[0]
 
-        # If there are more then one maxferet-combination, this two lines
+        # If there are more than one maxferet-combination, this two lines
         # sort them in x and y and chooses the first element.
         maxf_coords_index_y = maxf_coords_index[:len(maxf_coords_index) // 2][0]
         maxf_coords_index_x = maxf_coords_index[len(maxf_coords_index) // 2:][0]
@@ -188,12 +193,15 @@ class Calculater():
 
         """
         self.maxf90_angle = self.maxf_angle + np.pi / 2
-        self.maxf90 = self.calculate_distances(self.maxf90_angle)
+        self.maxf90, self.maxf90_coords = self.calculate_distances(self.maxf90_angle - np.pi / 2)
 
         if self.edge:
             self.maxf90 /= 2
 
-
+        if self.maxf90_angle == 0 or self.maxf90_angle == np.pi:
+            self.maxf90_t = np.inf
+        else:
+            self.maxf90_t = self.maxf90_coords.T[0][1] - np.tan(self.maxf90_angle) * self.maxf90_coords.T[1][1]
 
     def calculate_minferet90(self):
         """
@@ -205,12 +213,15 @@ class Calculater():
 
         """
         self.minf90_angle = self.minf_angle + np.pi / 2
-        self.minf90 = self.calculate_distances(self.minf90_angle)
+        self.minf90, self.minf90_coords = self.calculate_distances(self.minf90_angle - np.pi / 2)
 
         if self.edge:
             self.minf90 /= 2
 
-
+        if self.minf90_angle == 0 or self.minf90_angle == np.pi:
+            self.minf90_t = np.inf
+        else:
+            self.minf90_t = self.minf90_coords.T[0][1] - np.tan(self.minf90_angle) * self.minf90_coords.T[1][1]
 
     def calculate_distances(self, a):
         """ 
@@ -230,6 +241,9 @@ class Calculater():
         t_max = self.hull.T[max_i][0] - m * self.hull.T[max_i][1]
         t_min = self.hull.T[min_i][0] - m * self.hull.T[min_i][1]
 
+        max_xy = [self.hull[0][max_i], self.hull[1][max_i]]
+        min_xy = [self.hull[0][min_i], self.hull[1][min_i]]
+
         distance = np.abs(t_max - t_min) / np.sqrt(1 + m ** 2)
 
-        return distance
+        return distance, np.array([max_xy, min_xy])
