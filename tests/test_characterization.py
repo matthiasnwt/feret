@@ -34,11 +34,12 @@ PUBLIC_ATTRS = (
     "minf90_angle",
 )
 
-# Exact equality is expected — the refactor must not change a single bit of the
-# computed numbers. ``assert_allclose`` with ``rtol=0`` and ``atol=0`` is the
-# strictest possible tolerance.
-_RTOL = 0.0
-_ATOL = 0.0
+# Tolerances are tight enough to catch any real algorithmic drift but loose
+# enough to absorb platform-level floating-point noise (BLAS/libm differences
+# across Linux, macOS, Windows and Python builds). Golden values were captured
+# on one machine; a few ULPs of variation across runners is expected.
+_RTOL = 1e-12
+_ATOL = 1e-12
 
 
 @pytest.fixture(params=sorted(SHAPES.keys()))
