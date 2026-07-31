@@ -31,7 +31,11 @@ if ($currentBranch -ne $Branch) {
     throw "Refusing to release: on branch '$currentBranch', expected '$Branch'. Use -Branch to override."
 }
 
-if (-not (git diff --quiet; $?) -or -not (git diff --cached --quiet; $?)) {
+git diff --quiet
+$unstagedDirty = ($LASTEXITCODE -ne 0)
+git diff --cached --quiet
+$stagedDirty = ($LASTEXITCODE -ne 0)
+if ($unstagedDirty -or $stagedDirty) {
     throw "Refusing to release: working tree has uncommitted changes."
 }
 
@@ -52,14 +56,13 @@ Invoke-Step "Creating annotated tag $tag" {
 }
 
 Invoke-Step "Pushing tag $tag" {
-    $args = @($Remote, $tag)
-    if ($Force) { $args = @('--force') + $args }
-    git push @args
+    $pushArgs = @($Remote, $tag)
+    if ($Force) { $pushArgs = @('--force') + $pushArgs }
+    git push @pushArgs
 }
 
 Invoke-Step "Creating GitHub release $tag" {
-    $args = @('release', 'create', $tag, '--title', $tag, '--notes', $Notes)
-    gh @args
+    gh release create $tag --title $tag --notes $Notes
 }
 
 Write-Host ""
