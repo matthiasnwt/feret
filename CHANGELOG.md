@@ -47,7 +47,7 @@ verified in two ways:
 * `ruff` and `mypy` configured; `pre-commit` hooks added.
 * GitHub Actions CI runs the test suite on Python 3.9, 3.10, 3.11 and 3.12
   across Linux, macOS and Windows, plus a lint job.
-* Requires Python 3.9+.
+* Requires Python 3.8+.
 
 ### Known behaviour preserved verbatim
 

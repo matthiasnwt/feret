@@ -19,7 +19,7 @@ This module gives the exact results as ImageJ (use `edge=True` as shown below), 
 pip install feret
 ```
 
-Requires Python 3.9 or newer. The following runtime dependencies are pulled
+Requires Python 3.8 or newer. The following runtime dependencies are pulled
 in automatically: `numpy`, `scipy`, `opencv-python`, `matplotlib`. The package
 works on both NumPy 1.x and NumPy 2.x.
 

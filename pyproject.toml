@@ -10,7 +10,7 @@ license = { file = "LICENSE" }
 authors = [
     { name = "matthiasnwt", email = "62239991+matthiasnwt@users.noreply.github.com" },
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.8"
 keywords = [
     "feret",
     "feretdiameter",
@@ -32,6 +32,7 @@ classifiers = [
     "Operating System :: MacOS",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
@@ -96,7 +97,7 @@ testpaths = ["tests"]
 
 [tool.ruff]
 line-length = 100
-target-version = "py39"
+target-version = "py38"
 extend-exclude = [".venv", "build", "dist"]
 
 [tool.ruff.lint]
@@ -129,8 +130,8 @@ ignore = [
 [tool.mypy]
 # NumPy's own bundled stubs use `type` statements introduced in 3.12,
 # so we point mypy at 3.12 for its own analysis. This does not change the
-# minimum supported runtime version (``requires-python = ">=3.9"``); the
-# code stays 3.9-compatible.
+# minimum supported runtime version (``requires-python = ">=3.8"``); the
+# code stays 3.8-compatible via ``from __future__ import annotations``.
 python_version = "3.12"
 files = ["src/feret"]
 strict = false
