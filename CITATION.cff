@@ -1,0 +1,33 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "Feret: A Python Module to calculate the Feret Diameter of Binary Images"
+abstract: >-
+  Python module for exact calculation of the maximum and minimum Feret
+  diameters (and the diameters 90° to each) of binary images. Results
+  match ImageJ when using pixel-edge mode and are computed exactly rather
+  than approximated.
+type: software
+authors:
+  - family-names: "Neuwirth-Trapp"
+    given-names: "Matthias"
+    email: "mneuwirth@ethz.ch"
+    orcid: "https://orcid.org/0009-0006-5320-6354"
+version: "1.4.0"
+date-released: "2026-07-31"
+url: "https://github.com/matthiasnwt/feret"
+repository-code: "https://github.com/matthiasnwt/feret"
+license: MIT
+keywords:
+  - feret diameter
+  - maxferet
+  - minferet
+  - binary image
+  - image analysis
+  - caliper diameter
+  - python
+# When the Zenodo GitHub integration is enabled and a release is cut, add
+# the concept DOI (which always resolves to the latest version) here:
+# identifiers:
+#   - type: doi
+#     value: "10.5281/zenodo.XXXXXXX"
+#     description: "The concept DOI of the software (all versions)."

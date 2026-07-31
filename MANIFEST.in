@@ -1,0 +1,13 @@
+# Include documentation and metadata not auto-picked-up by setuptools.
+include CHANGELOG.md
+include FINDINGS.md
+include CITATION.cff
+include .pre-commit-config.yaml
+include pyproject.toml
+
+# Ship the full test suite (fixtures + support files) in the sdist so users
+# who download the source can run ``pytest`` from a fresh checkout.
+recursive-include tests *.py *.json *.npy
+
+# Ship the helper scripts (A/B comparison, task-snippet verifier, baseline).
+recursive-include scripts *.py *.json

@@ -1,6 +1,30 @@
 # *Feret*: A Python Module to calculate the Feret Diameter of Binary Images
 
-<img src="README.assets\plot_method.png" style="zoom: 33%;" />
+## 📖 How to cite
+
+If you use this software in academic work, **please cite it**. GitHub renders a
+"Cite this repository" button in the sidebar that reads the [CITATION.cff](CITATION.cff)
+file and produces BibTeX / APA on demand.
+
+> Neuwirth-Trapp, M. (2026). *Feret: A Python Module to calculate the Feret
+> Diameter of Binary Images* (Version 1.4.0) [Computer software].
+> https://github.com/matthiasnwt/feret
+
+BibTeX:
+
+```bibtex
+@software{neuwirth_trapp_feret,
+  author  = {Neuwirth-Trapp, Matthias},
+  title   = {Feret: A Python Module to calculate the Feret Diameter of Binary Images},
+  version = {1.4.0},
+  year    = {2026},
+  url     = {https://github.com/matthiasnwt/feret}
+}
+```
+
+---
+
+<img src="https://raw.githubusercontent.com/matthiasnwt/feret/main/README.assets/plot_method.png" width="400" />
 
 This python module can calculate the following parameters for binary images:
 
@@ -121,6 +145,6 @@ img = tif.imread('example.tif') # Image has to be a numpy 2d-array.
 feret.plot(img) #edge=True can be passed here too
 ```
 
-<img src="README.assets\plot_method.png" style="zoom: 33%;" />
+<img src="https://raw.githubusercontent.com/matthiasnwt/feret/main/README.assets/plot_method.png" width="400" />
 
 The reason for the two MinFeret points on the left is described above. The MinFeret line does not have to run in between its two base points or through one of them. MaxFeret and MinFeret do not have to be 90° to each other. To calculate the 90° to MaxFeret and MinFeret use `feret.max90(img)` and `feret.min90(img)` methods.
