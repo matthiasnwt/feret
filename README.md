@@ -1,24 +1,31 @@
 # *Feret*: A Python Module to calculate the Feret Diameter of Binary Images
 
+[![PyPI](https://img.shields.io/pypi/v/feret.svg)](https://pypi.org/project/feret/)
+[![Downloads](https://static.pepy.tech/badge/feret)](https://pepy.tech/project/feret)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21727752.svg)](https://doi.org/10.5281/zenodo.21727752)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 ## 📖 How to cite
 
 If you use this software in academic work, **please cite it**. GitHub renders a
-"Cite this repository" button in the sidebar that reads the [CITATION.cff](CITATION.cff)
+"Cite this repository" button in the sidebar that reads the
+[CITATION.cff](https://github.com/matthiasnwt/feret/blob/main/CITATION.cff)
 file and produces BibTeX / APA on demand.
 
 > Neuwirth-Trapp, M. (2026). *Feret: A Python Module to calculate the Feret
-> Diameter of Binary Images* (Version 1.4.0) [Computer software].
-> https://github.com/matthiasnwt/feret
+> Diameter of Binary Images* [Computer software]. Zenodo.
+> https://doi.org/10.5281/zenodo.21727752
 
 BibTeX:
 
 ```bibtex
 @software{neuwirth_trapp_feret,
-  author  = {Neuwirth-Trapp, Matthias},
-  title   = {Feret: A Python Module to calculate the Feret Diameter of Binary Images},
-  version = {1.4.0},
-  year    = {2026},
-  url     = {https://github.com/matthiasnwt/feret}
+  author    = {Neuwirth-Trapp, Matthias},
+  title     = {Feret: A Python Module to calculate the Feret Diameter of Binary Images},
+  year      = {2026},
+  publisher = {Zenodo},
+  doi       = {10.5281/zenodo.21727752},
+  url       = {https://doi.org/10.5281/zenodo.21727752}
 }
 ```
 
@@ -35,7 +42,7 @@ This python module can calculate the following parameters for binary images:
 
 See this [Wikipedia page](https://en.wikipedia.org/wiki/Feret_diameter) to get the definition of those parameters.
 
-This module gives the exact results as ImageJ (use `edge=True` as shown below), all the parameters are exactly calculated and **not** approximated.
+This module reproduces ImageJ's results exactly (use `edge=True` as shown below), all the parameters are exactly calculated and **not** approximated.
 
 ## Installation
 
@@ -81,7 +88,7 @@ The minferet is exactly calculated and **not** approximated. My algorithm uses t
 ## Use
 The module can be used as followed:
 
-First you need a binary image for which the feret diameter should be calculated. The background has to have the value zero, the object can have any nonzero  value. The object doesn't have to be convex. At the moment the module only supports one object per image.This means, that if there are multiple not connected regions, the script will calculate a convexhull which include all regions and for this hull the feret diameter is calculated.
+First you need a binary image for which the feret diameter should be calculated. The background has to have the value zero, the object can have any nonzero  value. The object doesn't have to be convex. At the moment the module only supports one object per image. This means, that if there are multiple not connected regions, the script will calculate a convexhull which include all regions and for this hull the feret diameter is calculated.
 
 The calls are:
 

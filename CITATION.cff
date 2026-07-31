@@ -12,7 +12,13 @@ authors:
     given-names: "Matthias"
     email: "mneuwirth@ethz.ch"
     orcid: "https://orcid.org/0009-0006-5320-6354"
-version: "1.4.0"
+    affiliation: "ETH Zurich"
+doi: "10.5281/zenodo.21727752"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.21727752"
+    description: "The concept DOI of the software (all versions)."
+version: "1.4.1"
 date-released: "2026-07-31"
 url: "https://github.com/matthiasnwt/feret"
 repository-code: "https://github.com/matthiasnwt/feret"
@@ -25,9 +31,3 @@ keywords:
   - image analysis
   - caliper diameter
   - python
-# When the Zenodo GitHub integration is enabled and a release is cut, add
-# the concept DOI (which always resolves to the latest version) here:
-# identifiers:
-#   - type: doi
-#     value: "10.5281/zenodo.XXXXXXX"
-#     description: "The concept DOI of the software (all versions)."
