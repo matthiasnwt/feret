@@ -64,7 +64,7 @@ def test_empty_mask_raises() -> None:
     zero or NaN."""
 
     empty = np.zeros((10, 10), dtype=np.uint8)
-    with pytest.raises(Exception):
+    with pytest.raises(Exception):  # noqa: B017 - characterizing "must fail loudly", any type OK
         feret.calc(empty)
 
 
@@ -74,7 +74,7 @@ def test_single_pixel_raises() -> None:
 
     img = np.zeros((10, 10), dtype=np.uint8)
     img[5, 5] = 1
-    with pytest.raises(Exception):
+    with pytest.raises(Exception):  # noqa: B017 - characterizing "must fail loudly", any type OK
         feret.calc(img)
 
 

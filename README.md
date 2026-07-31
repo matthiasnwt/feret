@@ -13,10 +13,33 @@ See this [Wikipedia page](https://en.wikipedia.org/wiki/Feret_diameter) to get t
 
 This module gives the exact results as ImageJ (use `edge=True` as shown below), all the parameters are exactly calculated and **not** approximated.
 
-## Installations
-This project is available via pip:
+## Installation
 
-`pip install feret`
+```
+pip install feret
+```
+
+Requires Python 3.9 or newer. The following runtime dependencies are pulled
+in automatically: `numpy`, `scipy`, `opencv-python`, `matplotlib`. The package
+works on both NumPy 1.x and NumPy 2.x.
+
+### Development install
+
+```
+git clone https://github.com/matthiasnwt/feret
+cd feret
+python -m venv .venv
+.venv\Scripts\activate            # Windows PowerShell / cmd
+# or: source .venv/bin/activate    # Linux / macOS
+pip install -e ".[dev]"
+pytest
+pre-commit install
+```
+
+`pip install -e ".[dev]"` adds `pytest`, `ruff`, `mypy`, `pre-commit`,
+`tifffile` and `build`. Run the full test matrix with `pytest`, lint with
+`ruff check src tests` and `ruff format --check src tests`, and type-check
+with `mypy`.
 
 ## Pieces of Information
 
@@ -36,7 +59,7 @@ The module can be used as followed:
 
 First you need a binary image for which the feret diameter should be calculated. The background has to have the value zero, the object can have any nonzero  value. The object doesn't have to be convex. At the moment the module only supports one object per image.This means, that if there are multiple not connected regions, the script will calculate a convexhull which include all regions and for this hull the feret diameter is calculated.
 
-Thr calls are:
+The calls are:
 
 ```python
 import feret

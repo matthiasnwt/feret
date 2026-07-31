@@ -8,7 +8,7 @@ vertices.
 
 from __future__ import annotations
 
-from typing import Callable, Dict
+from typing import Callable
 
 import numpy as np
 
@@ -144,7 +144,7 @@ def repo_fixture_image() -> np.ndarray:
     return np.load(path)
 
 
-SHAPES: Dict[str, Callable[[], np.ndarray]] = {
+SHAPES: dict[str, Callable[[], np.ndarray]] = {
     "square": square,
     "rectangle": rectangle,
     "rotated_square": rotated_square,
@@ -162,5 +162,5 @@ SHAPES: Dict[str, Callable[[], np.ndarray]] = {
 }
 
 
-def all_shapes() -> Dict[str, np.ndarray]:
+def all_shapes() -> dict[str, np.ndarray]:
     return {name: fn() for name, fn in SHAPES.items()}

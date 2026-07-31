@@ -1,41 +1,139 @@
-[tool.poetry]
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
 name = "feret"
-version = "1.3.1"
-description = "Calculate the maximum and minimum Feret diameter."
-authors = ["matthiasnwt <62239991+matthiasnwt@users.noreply.github.com>"]
-license = "MIT"
+description = "Calculate the maximum and minimum Feret diameter of a binary image."
 readme = "README.md"
-
-
-repository = "https://github.com/matthiasnwt/feret"
-homepage = "https://github.com/matthiasnwt/feret"
-
-keywords = ["feret", "feretdiameter", "maxferet", "diameter", "maximum", "caliper", "caliper diameter", "python", "minferet", "minimum", "feret diameter"]
-
+license = { file = "LICENSE" }
+authors = [
+    { name = "matthiasnwt", email = "62239991+matthiasnwt@users.noreply.github.com" },
+]
+requires-python = ">=3.9"
+keywords = [
+    "feret",
+    "feretdiameter",
+    "maxferet",
+    "diameter",
+    "maximum",
+    "caliper",
+    "caliper diameter",
+    "python",
+    "minferet",
+    "minimum",
+    "feret diameter",
+]
 classifiers = [
-	"Development Status :: 5 - Production/Stable",
-	"Operating System :: Microsoft :: Windows",
-	"Operating System :: Unix",
-	"Operating System :: MacOS",
-	"Programming Language :: Python",
-	"Topic :: Scientific/Engineering",
-	"Topic :: Scientific/Engineering :: Physics",
-	"Topic :: Scientific/Engineering :: Image Processing",
-	"Topic :: Scientific/Engineering :: Information Analysis",
-	"Topic :: Scientific/Engineering :: Visualization",
-	"Topic :: Utilities"
+    "Development Status :: 5 - Production/Stable",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: Unix",
+    "Operating System :: MacOS",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Topic :: Scientific/Engineering :: Image Processing",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+    "Topic :: Scientific/Engineering :: Visualization",
+    "Topic :: Utilities",
+]
+dependencies = [
+    "numpy>=1.22",
+    "scipy>=1.8",
+    "matplotlib>=3.5",
+    "opencv-python>=4.5",
+]
+dynamic = ["version"]
+
+[project.optional-dependencies]
+# ``pip install feret[plot]`` is a no-op today because matplotlib is already a
+# runtime dependency; the extra exists for callers who want to state their
+# intent explicitly and so it can be flipped to optional in a future major
+# release without renaming the extra.
+plot = ["matplotlib>=3.5"]
+dev = [
+    "pytest>=7",
+    "ruff>=0.5",
+    "mypy>=1.8",
+    "pre-commit>=3",
+    "tifffile",
+    "build",
 ]
 
-[tool.poetry.dependencies]
-python = "^3"
-numpy = "^1.22.3"
-scipy = "^1.8.0"
-matplotlib = "^3.5.1"
-opencv-python = "^4.5"
+[project.urls]
+Homepage = "https://github.com/matthiasnwt/feret"
+Repository = "https://github.com/matthiasnwt/feret"
+Changelog = "https://github.com/matthiasnwt/feret/blob/main/CHANGELOG.md"
 
+# ---------------------------------------------------------------------------
+# setuptools: src/ layout with dynamic version
+# ---------------------------------------------------------------------------
 
-[tool.poetry.dev-dependencies]
+[tool.setuptools.packages.find]
+where = ["src"]
 
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+[tool.setuptools.dynamic]
+version = { attr = "feret._version.__version__" }
+
+# ---------------------------------------------------------------------------
+# pytest
+# ---------------------------------------------------------------------------
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-ra --strict-markers"
+testpaths = ["tests"]
+
+# ---------------------------------------------------------------------------
+# ruff
+# ---------------------------------------------------------------------------
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+extend-exclude = [".venv", "build", "dist"]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "F",   # pyflakes
+    "I",   # isort
+    "UP",  # pyupgrade
+    "B",   # flake8-bugbear
+    "SIM", # flake8-simplify
+]
+ignore = [
+    "E501", # long lines are handled by the formatter
+    # ``feret.max`` and ``feret.min`` intentionally shadow builtins for API
+    # backwards-compatibility. They live in their own module so callers write
+    # ``feret.max(...)`` rather than ``max(...)``; the shadow is only local
+    # to the module, not global.
+    "A001",
+    "A004",
+]
+
+[tool.ruff.lint.per-file-ignores]
+# tests build up shapes and fixtures freely, so relax a few things
+"tests/*" = ["B011"]
+
+# ---------------------------------------------------------------------------
+# mypy
+# ---------------------------------------------------------------------------
+
+[tool.mypy]
+# NumPy's own bundled stubs use `type` statements introduced in 3.12,
+# so we point mypy at 3.12 for its own analysis. This does not change the
+# minimum supported runtime version (``requires-python = ">=3.9"``); the
+# code stays 3.9-compatible.
+python_version = "3.12"
+files = ["src/feret"]
+strict = false
+warn_unused_ignores = true
+warn_redundant_casts = true
+ignore_missing_imports = true

@@ -14,11 +14,11 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Any, Dict
-
-import feret
+from typing import Any
 
 from shapes import SHAPES
+
+import feret
 
 GOLDEN_PATH = Path(__file__).with_name("golden.json")
 
@@ -35,9 +35,9 @@ PUBLIC_ATTRS = (
 )
 
 
-def _record_one(img, edge: bool) -> Dict[str, Any]:
+def _record_one(img, edge: bool) -> dict[str, Any]:
     res = feret.calc(img, edge=edge)
-    record: Dict[str, Any] = {attr: float(getattr(res, attr)) for attr in PUBLIC_ATTRS}
+    record: dict[str, Any] = {attr: float(getattr(res, attr)) for attr in PUBLIC_ATTRS}
 
     all_tuple = feret.all(img, edge=edge)
     record["all_tuple"] = [float(v) for v in all_tuple]
@@ -49,7 +49,7 @@ def _record_one(img, edge: bool) -> Dict[str, Any]:
 
 
 def main() -> None:
-    golden: Dict[str, Dict[str, Dict[str, Any]]] = {}
+    golden: dict[str, dict[str, dict[str, Any]]] = {}
     for name, factory in SHAPES.items():
         img = factory()
         golden[name] = {

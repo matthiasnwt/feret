@@ -12,10 +12,9 @@ from __future__ import annotations
 
 import matplotlib.pyplot as plt
 import pytest
+from shapes import SHAPES
 
 import feret
-
-from shapes import SHAPES
 
 _SMOKE_SHAPES = [
     "square",

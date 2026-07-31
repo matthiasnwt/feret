@@ -11,17 +11,16 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 import numpy as np
 import pytest
+from shapes import SHAPES
 
 import feret
 
-from shapes import SHAPES
-
 GOLDEN_PATH = Path(__file__).with_name("golden.json")
-GOLDEN: Dict[str, Dict[str, Dict[str, Any]]] = json.loads(GOLDEN_PATH.read_text())
+GOLDEN: dict[str, dict[str, dict[str, Any]]] = json.loads(GOLDEN_PATH.read_text())
 
 # Attributes on ``feret.calc(...)`` result that the README documents.
 PUBLIC_ATTRS = (
@@ -58,7 +57,7 @@ def edge(request) -> bool:
 
 
 @pytest.fixture
-def golden(shape_name: str, edge: bool) -> Dict[str, Any]:
+def golden(shape_name: str, edge: bool) -> dict[str, Any]:
     key = "edge_true" if edge else "edge_false"
     return GOLDEN[shape_name][key]
 
@@ -71,7 +70,7 @@ class TestCalcResult:
     """``feret.calc`` returns an object with the documented attributes."""
 
     def test_all_documented_attributes_match_golden(
-        self, image: np.ndarray, edge: bool, golden: Dict[str, Any]
+        self, image: np.ndarray, edge: bool, golden: dict[str, Any]
     ) -> None:
         res = feret.calc(image, edge=edge)
         for attr in PUBLIC_ATTRS:
@@ -81,16 +80,14 @@ class TestCalcResult:
         res_default = feret.calc(image)
         res_explicit = feret.calc(image, edge=False)
         for attr in PUBLIC_ATTRS:
-            _assert_close(
-                getattr(res_default, attr), getattr(res_explicit, attr), attr
-            )
+            _assert_close(getattr(res_default, attr), getattr(res_explicit, attr), attr)
 
 
 class TestAll:
     """``feret.all`` returns ``(maxf, minf, minf90, maxf90)`` in that order."""
 
     def test_returns_four_values_in_documented_order(
-        self, image: np.ndarray, edge: bool, golden: Dict[str, Any]
+        self, image: np.ndarray, edge: bool, golden: dict[str, Any]
     ) -> None:
         maxf, minf, minf90, maxf90 = feret.all(image, edge=edge)
         _assert_close(maxf, golden["maxf"], "all[0] maxf")
